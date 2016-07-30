@@ -50,7 +50,6 @@ public class ProblemControllerIT {
 		given()
         .pathParam("id", "1")
         .formParam("status", "solved")
-        .then()
 		.when().post(PROBLEM_STATUS)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
@@ -61,7 +60,6 @@ public class ProblemControllerIT {
 	public void getProblemByIdTest(){
 		given().
         pathParam("id", "10").
-        then().
 		when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
@@ -79,7 +77,9 @@ public class ProblemControllerIT {
 		given().
 		pathParam("id", "1").
 		formParameters(updateProblem)
-		.put(PROBLEM).then()
+		.when()
+		.put(PROBLEM_ID)
+		.then()
 		.statusCode(HttpStatus.SC_OK)
 		.body("data.message", equalTo("Problem altered successfully"));	
 	}
@@ -88,13 +88,13 @@ public class ProblemControllerIT {
 	public void deleteProblemTest(){		
 		given().
 		pathParam("id", "1")
-		.delete(PROBLEM).then()
+		.delete(PROBLEM_ID)
+		.then()
 		.statusCode(HttpStatus.SC_OK)
 		.body("data.message", equalTo("Problem removed successfully"));
 		
 		given().
         pathParam("id", "1").
-        then().
 		when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_NOT_FOUND);
@@ -116,7 +116,6 @@ public class ProblemControllerIT {
 		
 		given().
         pathParam("id", 1).
-        then().
 		when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
