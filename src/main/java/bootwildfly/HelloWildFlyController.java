@@ -8,7 +8,7 @@ import io.swagger.annotations.*;
 @RestController
 public class HelloWildFlyController {
 
-	@ApiOperation(value = "getGreeting", nickname = "getGreeting")
+	@ApiOperation(value = "getHello", nickname = "getHello")
 	@ApiResponses(value = { 
             @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 401, message = "Unauthorized"),
