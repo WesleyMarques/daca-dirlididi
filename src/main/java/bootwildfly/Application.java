@@ -8,9 +8,12 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
+@EnableSwagger2
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
