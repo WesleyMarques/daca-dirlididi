@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.*;
 
+@Api(value="solution", description="Operations about solution")
 @RestController
 public class SolutionController {
 	
@@ -21,6 +22,7 @@ public class SolutionController {
             	dataType = "string", paramType = "body")
       })	
 	@RequestMapping(method = RequestMethod.POST, path="/solution", produces = "application/json")
+	@ApiOperation(value = "Submit a solution to a problem")
     public String save(){
         return ("{failed_tests : [{“desc” : “teste 1”,“dica” : “dica 1”}]}");
     }

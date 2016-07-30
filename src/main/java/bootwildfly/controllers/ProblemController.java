@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.*;
 
+@Api(value="problem", description="Operations about problem")
 @RestController
 public class ProblemController {
 
@@ -25,11 +26,13 @@ public class ProblemController {
             	dataType = "string", paramType = "query")
       })
 	@RequestMapping(method = RequestMethod.GET, path="/problem", produces = "application/json")
+	@ApiOperation(value = "Returns all the problems of system", notes = "Return the array of objects relative to all the problems of the system")
     public String get(){
         return ("[{name: “problema 1”,desc : “descricao ... “,code: “ky34hke9”,created_at: “30/07/2016”,solved: “true”}]");
     }
 	
 	@RequestMapping(method = RequestMethod.GET, path="/problem/{code}", produces = "application/json")
+	@ApiOperation(value = "Returns a problem by Code")
     public String show(@PathVariable("code") String code){
         return ("{name: “problema 1”,desc : “descricao ... “,code: “ky34hke9”,dica: “dica para o prob...”,testes : [{descricao : “teste 1”,dica : “dica 1”,entrada : “entrada 1”,saida : “saida 1”}]}");
     }
@@ -48,6 +51,7 @@ public class ProblemController {
             	defaultValue = "[{desc: “teste 1”,tip: “dica 1”,input: “entrada 1”,output: “saida 1”}]")
       })	
 	@RequestMapping(method = RequestMethod.POST, path="/problem", produces = "application/json")
+	@ApiOperation(value = "Saves a problem in the system")
     public String save(){
         return ("{message : “Problem created successfully”}");
     }
@@ -66,6 +70,7 @@ public class ProblemController {
             	defaultValue = "[{desc: “teste 1”,tip: “dica 1”,input: “entrada 1”,output: “saida 1”}]")
       })	
 	@RequestMapping(method = RequestMethod.PUT, path="/problem/{code}", produces = "application/json")
+	@ApiOperation(value = "Updates a problem by Code")
     public String update(@PathVariable("code") String code){
         return ("{message : “Problem edited successfully”}");
     }
@@ -76,6 +81,7 @@ public class ProblemController {
         	dataType = "string", paramType = "body")
       })	
 	@RequestMapping(method = RequestMethod.POST, path="/problem/{code}/status", produces = "application/json")
+	@ApiOperation(value = "Updates the status(solved|closed) of a problem by Code")
     public String setStatus(@PathVariable("code") String code){
         return ("{message : “The problem was marked as solved|closed”}");
     }
