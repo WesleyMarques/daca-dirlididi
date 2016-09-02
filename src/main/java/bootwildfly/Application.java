@@ -13,6 +13,7 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -21,6 +22,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableAutoConfiguration
 @EnableSwagger2
 @SpringBootApplication
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Application extends SpringBootServletInitializer {
 	
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
