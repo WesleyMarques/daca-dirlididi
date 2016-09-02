@@ -1,7 +1,6 @@
 package bootwildfly;
 
-import bootwildfly.models.User;
-import bootwildfly.models.UserRepository;
+import bootwildfly.models.*;
 import org.springframework.boot.CommandLineRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class Application extends SpringBootServletInitializer {
     }
     
     @Bean
-	public CommandLineRunner demo(UserRepository repository) {
+	public CommandLineRunner demo(UserRepository repository, ProblemRepository repProb, TestRepository testRep) {
 		return (args) -> {
 			// save a couple of customers
 			User u = new User();
@@ -45,15 +44,17 @@ public class Application extends SpringBootServletInitializer {
 			u.password = "daca";
 			repository.save(u);
 
-			System.out.println("aldksalkd");
+			Problem p = new Problem();
+			p.name = "Problem name";
+			p.description = "Description";
+			Test t = new Test();
+			t.name = "Teste 1";
+			p.tests.add(t);
+			repProb.save(p);
 
-			User customer = repository.findOne(1L);
-			log.info("Customer found with findOne(1L):");
-			log.info("--------------------------------");
-			log.info(customer.toString());
-            log.info("");
+			Problem problem = repProb.findOne(1L);
+			log.info(problem.tests.size() + " ASDASDAS");
 		};
 	}
-
 }
 

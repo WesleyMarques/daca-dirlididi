@@ -1,9 +1,7 @@
 package bootwildfly.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +14,8 @@ public class Solution {
     @Column(nullable = false)
     public String body;
 
-    //public List<Output> outputs;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<Output> outputs = new ArrayList<>();
 
     public Solution() { }
 }

@@ -1,10 +1,10 @@
 package bootwildfly.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Problem {
@@ -21,8 +21,11 @@ public class Problem {
 
     public String code;
     public String tip;
-    //public List<Test> tests;
-    public boolean published;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<Test> tests = new ArrayList<>();
+
+    public boolean published = false;
 
     public Problem() { }
 
