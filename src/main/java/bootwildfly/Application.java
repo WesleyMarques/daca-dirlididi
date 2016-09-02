@@ -1,6 +1,10 @@
 package bootwildfly;
 
+import bootwildfly.models.User;
+import bootwildfly.models.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import bootwildfly.models.Customer;
-import bootwildfly.models.CustomerRepository;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
@@ -20,6 +22,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
+	
+	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -31,14 +35,21 @@ public class Application extends SpringBootServletInitializer {
     }
     
     @Bean
-	public CommandLineRunner demo(CustomerRepository repository) {
+	public CommandLineRunner demo(UserRepository repository) {
 		return (args) -> {
 			// save a couple of customers
-			repository.save(new Customer("Jack", "Bauer"));
-			repository.save(new Customer("Chloe", "O'Brian"));
-			repository.save(new Customer("Kim", "Bauer"));
-			repository.save(new Customer("David", "Palmer"));
-			repository.save(new Customer("Michelle", "Dessler"));
+			User u = new User();
+			u.username = "daca";
+			u.password = "daca";
+			repository.save(u);
+
+			System.out.println("aldksalkd");
+
+			User customer = repository.findOne(1L);
+			log.info("Customer found with findOne(1L):");
+			log.info("--------------------------------");
+			log.info(customer.toString());
+            log.info("");
 		};
 	}
 
