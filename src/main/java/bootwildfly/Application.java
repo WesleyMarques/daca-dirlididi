@@ -40,7 +40,8 @@ public class Application extends SpringBootServletInitializer {
 		return (args) -> {
 			// save a couple of customers
 			User u = new User();
-			u.username = "daca";
+			u.email = "daca";
+			u.role = Role.ADMIN;
 			u.password = "daca";
 			repository.save(u);
 
@@ -53,7 +54,12 @@ public class Application extends SpringBootServletInitializer {
 			repProb.save(p);
 
 			Problem problem = repProb.findOne(1L);
-			log.info(problem.tests.size() + " ASDASDAS");
+			log.info(problem.tests.size() + " Número de testes para o problema 1");
+
+			u.resolvidos.add(problem);
+			repository.save(u);
+			User userBD = repository.findOne(1L);
+			log.info(userBD.resolvidos.size() + " Problemas resolvidos pelo user 1");
 		};
 	}
 }

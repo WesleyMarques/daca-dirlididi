@@ -1,13 +1,11 @@
 package bootwildfly.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -17,11 +15,15 @@ public class User {
     private Long id;
     
     @Column(nullable = false)
-    public String username;
+    public String email;
 
     @Column(nullable = false)
     @JsonIgnore
     public String password;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(joinColumns={@JoinColumn(name="user_id")}, inverseJoinColumns={@JoinColumn(name="problem_id")})
+	public List<Problem> resolvidos = new ArrayList<>();
 
     public boolean type;
     
@@ -29,12 +31,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     public Role role;
 
-    public String getUsername() {
-		return username;
+    public String getEmail() {
+		return this.email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
