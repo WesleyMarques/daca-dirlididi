@@ -3,7 +3,7 @@ package integration.repositories;
 import bootwildfly.Application;
 import bootwildfly.models.Role;
 import bootwildfly.models.User;
-import bootwildfly.models.UserRepository;
+import bootwildfly.models.repositories.UserRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +29,9 @@ public class UserRepositoryTest {
     public void setup() {
         repUser.deleteAll();
         User u = new User();
-        u.email = "teste@gmail.com";
-        u.password = "1234";
-        u.role = Role.ADMIN;
+        u.setEmail("teste@gmail.com");
+        u.setPassword("1234");
+        u.setRole(Role.ADMIN);
         repUser.save(u);
     }
 

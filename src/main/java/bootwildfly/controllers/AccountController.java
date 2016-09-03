@@ -1,7 +1,7 @@
 package bootwildfly.controllers;
 
 import bootwildfly.models.User;
-import bootwildfly.models.UserRepository;
+import bootwildfly.models.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,8 +1,11 @@
 package bootwildfly.models;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,23 +18,37 @@ public class User {
     private Long id;
     
     @Column(nullable = false)
-    public String email;
+    private String email;
 
     @Column(nullable = false)
     @JsonIgnore
-    public String password;
+    private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(joinColumns={@JoinColumn(name="user_id")}, inverseJoinColumns={@JoinColumn(name="problem_id")})
-	public List<Problem> resolvidos = new ArrayList<>();
-
-    public boolean type;
+	@JoinTable
+	private List<Problem> resolvidos = new ArrayList<>();
     
     @Column(name="role", nullable = false)
     @Enumerated(EnumType.STRING)
-    public Role role;
+    private Role role;
 
-    public String getEmail() {
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<Problem> getResolvidos() {
+		return resolvidos;
+	}
+
+	public void setResolvidos(List<Problem> resolvidos) {
+		this.resolvidos = resolvidos;
+	}
+
+	public String getEmail() {
 		return this.email;
 	}
 
@@ -60,6 +77,4 @@ public class User {
 	}
 
 	public User() { }
-
-
 }

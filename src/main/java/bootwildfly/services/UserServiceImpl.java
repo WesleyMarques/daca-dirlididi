@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import bootwildfly.models.User;
 import bootwildfly.models.UserCreateForm;
-import bootwildfly.models.UserRepository;
+import bootwildfly.models.repositories.UserRepository;
 
 public class UserServiceImpl implements UserService {
 	

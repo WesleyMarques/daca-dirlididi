@@ -1,5 +1,6 @@
-package bootwildfly.models;
+package bootwildfly.models.repositories;
 
+import bootwildfly.models.Test;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
