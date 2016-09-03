@@ -1,7 +1,7 @@
-package daca.jbosswildfly.git;
+package integration.controllers;
 
-import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.equalTo;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.junit.Before;
@@ -23,8 +23,8 @@ import bootwildfly.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public class InfoControllerIT {
-	private static final String INFO = "/info";
+public class SolutionControllerIT {
+	private static final String SOLUTION = "/solution";
 	
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -39,12 +39,15 @@ public class InfoControllerIT {
 	@Test
 	public void getAccountTest(){
 		
-		when()
-		.get(INFO).then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("data.total_users", equalTo(15))
-		.body("data.total_problems", equalTo(10))
-		.body("data.problems_you_solved", equalTo(5));
+		Map<String, String> newSolution= new HashMap<String, String>();
+		newSolution.put("problem_code", "1002");
+		newSolution.put("code_solution", "while(true){syso('done');}");
+		newSolution.put("leng", "java");
+		given()
+		.formParameters(newSolution)
+		.when()
+		.post(SOLUTION).then()
+		.statusCode(HttpStatus.SC_OK);
 	}
 	
 	

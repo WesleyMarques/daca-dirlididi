@@ -1,10 +1,7 @@
-package daca.jbosswildfly.git;
+package integration.controllers;
 
-import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.junit.Before;
@@ -20,15 +17,14 @@ import com.jayway.restassured.RestAssured;
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-
 import bootwildfly.Application;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public class AccountControllerIT {
-	private static final String ACCOUNT = "/account";
+public class InfoControllerIT {
+	private static final String INFO = "/info";
 	
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -38,29 +34,17 @@ public class AccountControllerIT {
 		RestAssured.port = serverPort;
 	}
 	
-	@Test
-	public void postNewAccountTest(){
-		Map<String, String> newAccount= new HashMap<String, String>();
-		newAccount.put("name", "wesley");
-		newAccount.put("email", "wesley@gmail.com");
-		newAccount.put("password", "123456");
-		newAccount.put("type", "normal");
-		
-		given().
-		formParameters(newAccount)
-		.when()
-		.put(ACCOUNT).then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("data.message", equalTo("user created successfully"));	
-	}
+	
 	
 	@Test
 	public void getAccountTest(){
 		
 		when()
-		.get(ACCOUNT).then()
+		.get(INFO).then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data.email", equalTo("wesley@gmail.com"));	
+		.body("data.total_users", equalTo(15))
+		.body("data.total_problems", equalTo(10))
+		.body("data.problems_you_solved", equalTo(5));
 	}
 	
 	

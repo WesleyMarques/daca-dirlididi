@@ -1,4 +1,4 @@
-package integration.repository;
+package integration.repositories;
 
 import bootwildfly.Application;
 import bootwildfly.models.Role;

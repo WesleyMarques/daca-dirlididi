@@ -1,4 +1,4 @@
-package daca.jbosswildfly.git;
+package integration.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
