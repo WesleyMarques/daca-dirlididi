@@ -49,7 +49,7 @@ public class ProblemRepositoryTest {
         repProb.save(problem);
 
         Problem p = repProb.findAll().get(0);
-        Assert.assertTrue(p.getName() == "Problema x");
+        Assert.assertTrue(p.getName().equals("Problema x"));
     }
 
     @Test

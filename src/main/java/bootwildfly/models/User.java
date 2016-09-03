@@ -32,12 +32,23 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Solution> solutions = new ArrayList<>();
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public List<Solution> getSolutions() {
+		return solutions;
+	}
+
+	public void setSolutions(List<Solution> solutions) {
+		this.solutions = solutions;
 	}
 
 	public List<Problem> getResolvidos() {

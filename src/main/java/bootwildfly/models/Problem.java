@@ -1,13 +1,8 @@
 package bootwildfly.models;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Problem {
@@ -24,10 +19,12 @@ public class Problem {
     private String code;
     private String tip;
     private boolean published = false;
-    private boolean deleted = false;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Test> tests = new ArrayList<>();
+    private List<ProblemTest> tests = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Solution> solutions= new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "resolvidos")
     private List<User> usersResolvidos;
@@ -42,12 +39,12 @@ public class Problem {
         this.id = id;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public List<Solution> getSolutions() {
+        return solutions;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setSolutions(List<Solution> solutions) {
+        this.solutions = solutions;
     }
 
     public List<User> getUsersResolvidos() {
@@ -90,11 +87,11 @@ public class Problem {
         this.tip = tip;
     }
 
-    public List<Test> getTests() {
+    public List<ProblemTest> getTests() {
         return tests;
     }
 
-    public void setTests(List<Test> tests) {
+    public void setTests(List<ProblemTest> tests) {
         this.tests = tests;
     }
 

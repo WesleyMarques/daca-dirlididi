@@ -1,12 +1,9 @@
 package bootwildfly.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Test {
+public class ProblemTest {
 
     @Id
     @GeneratedValue
@@ -20,7 +17,11 @@ public class Test {
     private String output;
     private boolean visible;
 
-    public Test() { }
+    @ManyToOne
+    @JoinColumn(name="problem_id", nullable = false)
+    private Problem problem;
+
+    public ProblemTest() { }
 
     public Long getId() {
         return id;
@@ -68,5 +69,13 @@ public class Test {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public Problem getProblem() {
+        return problem;
+    }
+
+    public void setProblem(Problem problem) {
+        this.problem = problem;
     }
 }

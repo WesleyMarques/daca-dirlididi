@@ -2,7 +2,7 @@ package bootwildfly;
 
 import bootwildfly.models.*;
 import bootwildfly.models.repositories.ProblemRepository;
-import bootwildfly.models.repositories.TestRepository;
+import bootwildfly.models.repositories.ProblemTestRepository;
 import bootwildfly.models.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class Application extends SpringBootServletInitializer {
     }
     
     @Bean
-	public CommandLineRunner demo(UserRepository repository, ProblemRepository repProb, TestRepository testRep) {
+	public CommandLineRunner demo(UserRepository repository, ProblemRepository repProb, ProblemTestRepository testRep) {
 		return (args) -> {
 			// save a couple of customers
 			User u = new User();
@@ -51,8 +51,10 @@ public class Application extends SpringBootServletInitializer {
 			Problem p = new Problem();
 			p.setName("Problem name");
 			p.setDescription("Description");
-			Test t = new Test();
+
+			ProblemTest t = new ProblemTest();
 			t.setName("Teste 1");
+			t.setProblem(p);
 			p.getTests().add(t);
 			repProb.save(p);
 

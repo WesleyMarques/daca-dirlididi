@@ -31,7 +31,7 @@ public class UserRepositoryTest {
         User u = new User();
         u.setEmail("teste@gmail.com");
         u.setPassword("1234");
-        u.setRole(Role.ADMIN);
+        u.setRole(Role.USER);
         repUser.save(u);
     }
 
@@ -39,6 +39,8 @@ public class UserRepositoryTest {
     public void createUser() {
         List<User> users = repUser.findAll();
         Assert.assertTrue(users.size() == 1);
+        Assert.assertTrue(users.get(0).getEmail().equals("teste@gmail.com"));
+        Assert.assertTrue(users.get(0).getRole() == Role.USER);
     }
 
     @Test
@@ -48,7 +50,7 @@ public class UserRepositoryTest {
         repUser.save(user);
 
         user = repUser.findAll().get(0);
-        Assert.assertTrue(user.getEmail() == "daca2");
+        Assert.assertTrue(user.getEmail().equals("daca2"));
     }
 
     @Test
