@@ -3,6 +3,7 @@ package integration.repositories;
 import bootwildfly.Application;
 import bootwildfly.models.*;
 import bootwildfly.models.repositories.ProblemRepository;
+import bootwildfly.models.repositories.ProblemTestRepository;
 import bootwildfly.models.repositories.SolutionRepository;
 import bootwildfly.models.repositories.UserRepository;
 import org.junit.Assert;

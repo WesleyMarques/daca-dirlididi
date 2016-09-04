@@ -13,10 +13,7 @@ public class StaticticsController {
 	@Autowired
 	StatisticsService service;
 
-	@RequestMapping(
-			method = RequestMethod.GET,
-			path="/statistics",
-			produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET,path="/statistics",produces = "application/json")
     public Statistics get(){
 		Statistics s = new Statistics();
 		s.problems_you_solved = service.getTotalProblemsYouSolved();

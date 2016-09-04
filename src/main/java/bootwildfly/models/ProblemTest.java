@@ -17,9 +17,6 @@ public class ProblemTest {
     private String output;
     private boolean visible;
 
-    @ManyToOne
-    @JoinColumn(name="problem_id", nullable = false)
-    private Problem problem;
 
     public ProblemTest() { }
 
@@ -69,13 +66,5 @@ public class ProblemTest {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-    }
-
-    public Problem getProblem() {
-        return problem;
-    }
-
-    public void setProblem(Problem problem) {
-        this.problem = problem;
     }
 }

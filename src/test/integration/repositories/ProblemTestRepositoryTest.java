@@ -41,10 +41,7 @@ public class ProblemTestRepositoryTest {
 
         ProblemTest test = new ProblemTest();
         test.setName("Test 1");
-        test.setProblem(repProblem.findAll().get(0));
         repTeste.save(test);
-
-        Assert.assertTrue(repTeste.findAll().get(0).getProblem().getName().equals("Name 1"));
     }
 
     @Test

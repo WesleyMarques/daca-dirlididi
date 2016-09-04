@@ -2,7 +2,10 @@ package integration.repositories;
 
 import bootwildfly.Application;
 import bootwildfly.models.Problem;
+import bootwildfly.models.Role;
+import bootwildfly.models.User;
 import bootwildfly.models.repositories.ProblemRepository;
+import bootwildfly.models.repositories.UserRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +27,19 @@ public class ProblemRepositoryTest {
     @Autowired
     private ProblemRepository repProb;
 
+    @Autowired
+    private UserRepository repUser;
+
     @Before
     public void setup() {
+        repUser.deleteAll();
         repProb.deleteAll();
+        User u = new User();
+        u.setEmail("asda");
+        u.setPassword("asda");
+        u.setRole(Role.ADMIN);
+        repUser.save(u);
+
         Problem problem = new Problem();
         problem.setName("Problema 1");
         problem.setDescription("Description 1");
@@ -34,6 +47,10 @@ public class ProblemRepositoryTest {
         problem.setPublished(false);
         problem.setTip("Dica 1");
         repProb.save(problem);
+
+        User user1 = repUser.findAll().get(0);
+        user1.getResolvidos().add(repProb.findAll().get(0));
+        repUser.save(user1);
     }
 
     @Test
@@ -56,9 +73,8 @@ public class ProblemRepositoryTest {
     public void deleteProblem() {
         Problem problem = repProb.findAll().get(0);
         repProb.delete(problem);
-
-        int numProbs = repProb.findAll().size();
-        Assert.assertTrue(numProbs == 0);
+        Assert.assertTrue(repProb.count()== 0);
+        Assert.assertTrue(repUser.count() == 1);
     }
 
 }
