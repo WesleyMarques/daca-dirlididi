@@ -33,13 +33,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http
+		.httpBasic()
+		.and()
+		.authorizeRequests()
         .antMatchers("/login").permitAll()
         .anyRequest().authenticated()
         .and()
-        .formLogin().permitAll()
+        .formLogin()
+        .usernameParameter("email")
+        .passwordParameter("password")
+        .defaultSuccessUrl("/", true)
+        .permitAll()
         .and()
         .csrf().disable();
+		
+		http.logout()
+		.logoutUrl("/logout")
+		.invalidateHttpSession(true)		
+		.logoutSuccessUrl("/login");
 	}
 	
 	private CsrfTokenRepository csrfTokenRepository() {
@@ -70,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				bootwildfly.models.User user = userRepository.findOneByEmail(email);
 				if (user != null) {
 					return new User(user.getEmail(), user.getPassword(), true, true, true, true,
-							AuthorityUtils.createAuthorityList("USER"));
+							AuthorityUtils.createAuthorityList(user.getRole().toString()));
 				} else {
 					throw new UsernameNotFoundException("could not find the user '" + email + "'");
 				}
