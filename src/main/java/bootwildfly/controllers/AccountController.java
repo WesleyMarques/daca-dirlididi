@@ -1,8 +1,10 @@
 package bootwildfly.controllers;
 
+import bootwildfly.models.Role;
 import bootwildfly.models.User;
 import bootwildfly.models.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(value="account", description="Operations about account")
 @RestController
@@ -23,8 +26,8 @@ public class AccountController {
 
 	@RequestMapping(method = RequestMethod.GET, path="/account", produces = "application/json")
 	@ApiOperation(value = "Returns the account info of session user", notes = "Returns the account info of session user")
-    public User get(){
-		return repository.findAll().get(0);
+    public List<User> get(){
+		return repository.findAll();
     }
 
 	@ApiImplicitParams({
@@ -38,7 +41,12 @@ public class AccountController {
       })
 	@RequestMapping(method = RequestMethod.POST, path="/account", produces = "application/json")
 	@ApiOperation(value = "Saves an user in the system", notes = "Saves an user in the system")
-    public String save(){
+    public String save(@RequestBody Map<String, String> params){
+		User u = new User();
+		u.setEmail(params.get("email"));
+		u.setPassword(params.get("password"));
+		u.setRole(Role.valueOf(params.get("role")));
+		repository.save(u);
 		return ("{message : 'Account created successfully'}");
     }
 }
