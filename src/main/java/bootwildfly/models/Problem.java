@@ -1,5 +1,7 @@
 package bootwildfly.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +23,14 @@ public class Problem {
     private boolean published = false;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="problem_id")
     private List<ProblemTest> tests = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Solution> solutions= new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "resolvidos")
+    @JsonIgnore
     private List<User> usersResolvidos;
 
     public Problem() { }

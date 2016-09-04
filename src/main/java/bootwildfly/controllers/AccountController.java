@@ -23,22 +23,22 @@ public class AccountController {
 
 	@RequestMapping(method = RequestMethod.GET, path="/account", produces = "application/json")
 	@ApiOperation(value = "Returns the account info of session user", notes = "Returns the account info of session user")
-    public List<User> get(){
-        return repository.findAll();
+    public User get(){
+		return repository.findAll().get(0);
     }
-	
+
 	@ApiImplicitParams({
         @ApiImplicitParam(
         	name = "name", value = "User's name", required = true, dataType = "string", paramType = "body"),
         @ApiImplicitParam(
             	name = "email", value = "User's email", required = true, dataType = "string", paramType = "body"),
         @ApiImplicitParam(
-            	name = "type", value = "User's type (normal|admin)", required = true, 
+            	name = "type", value = "User's type (normal|admin)", required = true,
             	dataType = "string", paramType = "body")
-      })	
+      })
 	@RequestMapping(method = RequestMethod.POST, path="/account", produces = "application/json")
 	@ApiOperation(value = "Saves an user in the system", notes = "Saves an user in the system")
     public String save(){
-        return ("{message : 'Account created successfully'}");
+		return ("{message : 'Account created successfully'}");
     }
 }

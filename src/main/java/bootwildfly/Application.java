@@ -52,7 +52,6 @@ public class Application extends SpringBootServletInitializer {
 
 			ProblemTest t = new ProblemTest();
 			t.setName("Teste 1");
-			t.setProblem(p);
 			p.getTests().add(t);
 			repProb.save(p);
 
