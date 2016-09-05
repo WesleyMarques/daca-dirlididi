@@ -38,7 +38,7 @@ public class ProblemController {
 	
 	@RequestMapping(method = RequestMethod.GET, path="/problem/{id}", produces = "application/json")
 	@ApiOperation(value = "Returns a problem by Id")
-    public Problem show(@PathVariable("in") Long id){
+    public Problem show(@PathVariable("id") Long id){
         return repProblem.findOne(id);
     }
 	
@@ -46,10 +46,13 @@ public class ProblemController {
         @ApiImplicitParam(
         	name = "name", value = "Problem's name", required = true, dataType = "string", paramType = "body"),
         @ApiImplicitParam(
-            	name = "desc", value = "Problem's description", required = true, dataType = "string", paramType = "body"),
+            	name = "description", value = "Problem's description", required = true, dataType = "string", paramType = "body"),
         @ApiImplicitParam(
             	name = "tip", value = "Problem's typ", required = true, 
             	dataType = "string", paramType = "body"),
+		@ApiImplicitParam(
+				name = "published", value = "Problem's published flag", required = true,
+				dataType = "boolean", paramType = "body"),
         @ApiImplicitParam(
             	name = "tests", value = "Problem's tests", required = false, 
             	dataType = "array of objects {}", paramType = "body", 
@@ -78,12 +81,8 @@ public class ProblemController {
 	@RequestMapping(method = RequestMethod.PUT, path="/problem/{id}", produces = "application/json")
 	@ApiOperation(value = "Updates a problem by Id")
     public String update(@PathVariable("id") Long id, @RequestBody Problem problem){
-		Problem p = repProblem.findOne(id);
-		p.setName(problem.getName());
-		p.setDescription(problem.getDescription());
-		p.setTip(problem.getTip());
-		p.setPublished(problem.isPublished());
-		repProblem.save(p);
+		problem.setId(id);
+		repProblem.save(problem);
         return ("{message : “Problem edited successfully”}");
     }
 }
