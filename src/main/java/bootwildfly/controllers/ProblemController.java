@@ -30,7 +30,7 @@ public class ProblemController {
             	name = "order_type", value = "The type of ordernation (asc|desc)", required = true, 
             	dataType = "string", paramType = "query")
       })
-	@RequestMapping(method = RequestMethod.GET, path="/problem", produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, path="/api/problem", produces = "application/json")
 	@ApiOperation(value = "Returns all the problems of system", notes = "Return the array of objects relative to all the problems of the system")
     public List<Problem> get(){
         return repProblem.findAll();

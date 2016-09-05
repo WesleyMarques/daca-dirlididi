@@ -41,12 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 		.authorizeRequests()
         .antMatchers("/","/login", "/resources/static/**").permitAll()
-        /*.and()
-        .authorizeRequests()
-        .regexMatchers(HttpMethod.GET, "^/api/users/[\\d]*(\\/)?$").authenticated()
-        .regexMatchers(HttpMethod.GET, "^/api/users(\\/)?(\\?.+)?$").hasRole("ADMIN")
-        .regexMatchers(HttpMethod.DELETE, "^/api/users/[\\d]*(\\/)?$").hasRole("ADMIN")
-        .regexMatchers(HttpMethod.POST, "^/api/users(\\/)?$").hasRole("ADMIN")*/
         .and()
         .authorizeRequests()
         .antMatchers("/api/**").authenticated()
@@ -61,24 +55,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement()
         .maximumSessions(1)
         .maxSessionsPreventsLogin(true)
-        .expiredUrl("/login?expired");
+        .expiredUrl("/api?expired");
 		
 		http.logout()
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 		.invalidateHttpSession(true)		
-		.logoutSuccessUrl("/login?logout")
+		.logoutSuccessUrl("/api?logout")
+		.deleteCookies("JSESSIONID")
 		.permitAll();
 	}
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/resources/static/**");
-	}
-
-	private CsrfTokenRepository csrfTokenRepository() {
-		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		repository.setHeaderName("X-XSRF-TOKEN");
-		return repository;
 	}
 
 	@Autowired

@@ -63,11 +63,6 @@ public class LoginController {
         }
     }
 
-	@RequestMapping(method = RequestMethod.GET, path = "/login", produces = "application/json")
-	public String loginPage() {
-		return ("{message : 'Login Page'}");
-	}
-
 	@RequestMapping(method = RequestMethod.POST, path = "/logout", produces = "application/json")
 	@ApiOperation(value = "Logout of the system", notes = "Realizes the logout of the sytem")
 	public String logout() {
