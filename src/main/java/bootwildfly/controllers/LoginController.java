@@ -47,6 +47,7 @@ public class LoginController {
 		}
         return ("{token: '"+Jwts.builder().setSubject(user.getEmail())
             .claim("roles", Arrays.asList(user.getRole())).setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis()*2))
             .signWith(SignatureAlgorithm.HS256, "secretkey").compact()+"'}");
 	}
 

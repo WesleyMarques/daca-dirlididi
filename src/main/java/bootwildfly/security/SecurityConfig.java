@@ -13,14 +13,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import bootwildfly.models.repositories.UserRepository;
@@ -35,27 +32,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// Exception {
 	// auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
 	// }
+	
+//	@Autowired
+//	JwtFilter filterToken;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+		.csrf().disable()
+        .antMatcher("/api/**")
 		.authorizeRequests()
         .antMatchers("/","/login", "/resources/static/**").permitAll()
         .and()
         .authorizeRequests()
         .antMatchers("/api/**").authenticated()
         .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .httpBasic()
-        .and()
-        .csrf().disable();
         
-		http.sessionManagement()
-        .maximumSessions(1)
-        .maxSessionsPreventsLogin(true)
-        .expiredUrl("/api?expired");
+        .anonymous().disable();
 		
 		http.logout()
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
@@ -96,5 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		};
 	}
+	
+	 
 
 }
