@@ -1,9 +1,6 @@
 package bootwildfly.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -15,6 +12,9 @@ public class Output {
 
     @Column(nullable = false)
     private String value;
+
+    @OneToOne
+    private ProblemTest test;
 
     public Output() { }
 
@@ -32,5 +32,13 @@ public class Output {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public ProblemTest getTest() {
+        return test;
+    }
+
+    public void setTest(ProblemTest test) {
+        this.test = test;
     }
 }

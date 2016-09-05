@@ -1,6 +1,7 @@
 package bootwildfly.services;
 
 import bootwildfly.dto.Statistics;
+import bootwildfly.models.User;
 import bootwildfly.models.repositories.ProblemRepository;
 import bootwildfly.models.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,10 @@ public class StatisticsService {
     }
 
     private int getTotalProblemsYouSolved() {
-        return (int) repUser.findAll().get(0).getResolvidos().size();
+        // TODO get the user of session
+        if (repUser.count() > 0) {
+            return repUser.findAll().get(0).getResolvidos().size();
+        }
+        return 0;
     }
 }

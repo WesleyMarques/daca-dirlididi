@@ -41,7 +41,9 @@ public class ProblemTestRepositoryTest {
 
         ProblemTest test = new ProblemTest();
         test.setName("Test 1");
-        repTeste.save(test);
+        p = repProblem.findAll().get(0);
+        p.getTests().add(test);
+        repProblem.save(p);
     }
 
     @Test

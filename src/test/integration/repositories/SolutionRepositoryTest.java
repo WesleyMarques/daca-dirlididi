@@ -33,6 +33,9 @@ public class SolutionRepositoryTest {
     @Autowired
     private ProblemRepository repProblem;
 
+    @Autowired
+    private ProblemTestRepository repTest;
+
     @Before
     public void setup() {
         repSol.deleteAll();
@@ -51,11 +54,18 @@ public class SolutionRepositoryTest {
         Problem p = new Problem();
         p.setName("Name 1");
         p.setDescription("Description 1");
-        repProblem.save(p);
-        s.setProblem(repProblem.findAll().get(0));
 
+        ProblemTest test = new ProblemTest();
+        test.setName("Test 1");
+        test.setInput("Input 1");
+        test.setOutput("Output 1");
+        p.getTests().add(test);
+        repProblem.save(p);
+
+        s.setProblem(repProblem.findAll().get(0));
         Output o = new Output();
-        o.setValue("17");
+        o.setValue("Output 1");
+        o.setTest(repTest.findAll().get(0));
         s.getOutputs().add(o);
 
         repSol.save(s);
@@ -63,10 +73,13 @@ public class SolutionRepositoryTest {
 
     @Test
     public void createSolution() {
-        List<Solution> solutions = repSol.findAll();
-        Assert.assertTrue(repSol.findAll().size() == 1);
-        Assert.assertTrue(repUser.findAll().size() == 1);
-        Assert.assertTrue(repProblem.findAll().size() == 1);
+        Assert.assertTrue(repSol.count() == 1);
+        Assert.assertTrue(repUser.count() == 1);
+        Assert.assertTrue(repProblem.count() == 1);
+        Assert.assertTrue(repTest.count() == 1);
+        Assert.assertTrue(repSol.findAll().get(0).getOutputs().size() == 1);
+        Assert.assertTrue(repSol.findAll().get(0).getProblem() != null);
+        Assert.assertTrue(repSol.findAll().get(0).getOutputs().get(0).getTest() != null);
     }
 
     @Test
@@ -75,17 +88,19 @@ public class SolutionRepositoryTest {
         solution.setBody("Solution x");
         repSol.save(solution);
         Solution p = repSol.findAll().get(0);
+        Assert.assertTrue(repTest.count() == 1);
         Assert.assertTrue(p.getBody().equals("Solution x"));
     }
 
     @Test
     public void deleteSolution() {
-        Assert.assertTrue(repSol.findAll().size() == 1);
+        Assert.assertTrue(repSol.count() == 1);
         Solution solution = repSol.findAll().get(0);
         repSol.delete(solution);
-        Assert.assertTrue(repUser.findAll().size() == 1);
-        Assert.assertTrue(repProblem.findAll().size() == 1);
-        Assert.assertTrue(repSol.findAll().size() == 0);
+        Assert.assertTrue(repUser.count() == 1);
+        Assert.assertTrue(repProblem.count() == 1);
+        Assert.assertTrue(repTest.count() == 1);
+        Assert.assertTrue(repSol.count() == 0);
     }
 
 }
