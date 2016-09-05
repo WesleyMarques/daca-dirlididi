@@ -18,7 +18,6 @@ public class Problem {
 
     @Column(nullable = false)
     private String description;
-    private String code;
     private String tip;
     private boolean published = false;
 
@@ -73,14 +72,6 @@ public class Problem {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getTip() {

@@ -43,7 +43,6 @@ public class ProblemRepositoryTest {
         Problem problem = new Problem();
         problem.setName("Problema 1");
         problem.setDescription("Description 1");
-        problem.setCode("Code 1");
         problem.setPublished(false);
         problem.setTip("Dica 1");
         repProb.save(problem);

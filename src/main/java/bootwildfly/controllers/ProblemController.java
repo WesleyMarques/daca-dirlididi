@@ -1,15 +1,20 @@
 package bootwildfly.controllers;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import bootwildfly.models.Problem;
+import bootwildfly.models.repositories.ProblemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.*;
+
+import java.util.List;
 
 @Api(value="problem", description="Operations about problem")
 @RestController
 public class ProblemController {
+
+	@Autowired
+	ProblemRepository repProblem;
 
 	@ApiImplicitParams({
         @ApiImplicitParam(
@@ -27,14 +32,14 @@ public class ProblemController {
       })
 	@RequestMapping(method = RequestMethod.GET, path="/problem", produces = "application/json")
 	@ApiOperation(value = "Returns all the problems of system", notes = "Return the array of objects relative to all the problems of the system")
-    public String get(){
-        return ("[{name: “problema 1”,desc : “descricao ... “,code: “ky34hke9”,created_at: “30/07/2016”,solved: “true”}]");
+    public List<Problem> get(){
+        return repProblem.findAll();
     }
 	
-	@RequestMapping(method = RequestMethod.GET, path="/problem/{code}", produces = "application/json")
-	@ApiOperation(value = "Returns a problem by Code")
-    public String show(@PathVariable("code") String code){
-        return ("{name: “problema 1”,desc : “descricao ... “,code: “ky34hke9”,dica: “dica para o prob...”,testes : [{descricao : “teste 1”,dica : “dica 1”,entrada : “entrada 1”,saida : “saida 1”}]}");
+	@RequestMapping(method = RequestMethod.GET, path="/problem/{id}", produces = "application/json")
+	@ApiOperation(value = "Returns a problem by Id")
+    public Problem show(@PathVariable("in") Long id){
+        return repProblem.findOne(id);
     }
 	
 	@ApiImplicitParams({
@@ -52,8 +57,9 @@ public class ProblemController {
       })	
 	@RequestMapping(method = RequestMethod.POST, path="/problem", produces = "application/json")
 	@ApiOperation(value = "Saves a problem in the system")
-    public String save(){
-        return ("{message : “Problem created successfully”}");
+    public String save(@RequestBody Problem problem){
+        repProblem.save(problem);
+		return ("{message : “Problem created successfully”}");
     }
 	
 	@ApiImplicitParams({
@@ -69,20 +75,15 @@ public class ProblemController {
             	dataType = "array of objects {}", paramType = "body", 
             	defaultValue = "[{desc: “teste 1”,tip: “dica 1”,input: “entrada 1”,output: “saida 1”}]")
       })	
-	@RequestMapping(method = RequestMethod.PUT, path="/problem/{code}", produces = "application/json")
-	@ApiOperation(value = "Updates a problem by Code")
-    public String update(@PathVariable("code") String code){
+	@RequestMapping(method = RequestMethod.PUT, path="/problem/{id}", produces = "application/json")
+	@ApiOperation(value = "Updates a problem by Id")
+    public String update(@PathVariable("id") Long id, @RequestBody Problem problem){
+		Problem p = repProblem.findOne(id);
+		p.setName(problem.getName());
+		p.setDescription(problem.getDescription());
+		p.setTip(problem.getTip());
+		p.setPublished(problem.isPublished());
+		repProblem.save(p);
         return ("{message : “Problem edited successfully”}");
-    }
-	
-	@ApiImplicitParams({
-        @ApiImplicitParam(
-        	name = "status", value = "Problem's status (solved|close)", required = true, 
-        	dataType = "string", paramType = "body")
-      })	
-	@RequestMapping(method = RequestMethod.POST, path="/problem/{code}/status", produces = "application/json")
-	@ApiOperation(value = "Updates the status(solved|closed) of a problem by Code")
-    public String setStatus(@PathVariable("code") String code){
-        return ("{message : “The problem was marked as solved|closed”}");
     }
 }
