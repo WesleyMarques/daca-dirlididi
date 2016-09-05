@@ -1,8 +1,8 @@
 package bootwildfly.controllers;
 
-import bootwildfly.models.Role;
 import bootwildfly.models.User;
 import bootwildfly.models.repositories.UserRepository;
+import bootwildfly.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +24,9 @@ public class AccountController {
 	@Autowired
 	UserRepository repository;
 
+	@Autowired
+	UserService userService;
+
 	@RequestMapping(method = RequestMethod.GET, path="/account", produces = "application/json")
 	@ApiOperation(value = "Returns the account info of session user", notes = "Returns the account info of session user")
     public List<User> get(){
@@ -42,11 +45,13 @@ public class AccountController {
 	@RequestMapping(method = RequestMethod.POST, path="/account", produces = "application/json")
 	@ApiOperation(value = "Saves an user in the system", notes = "Saves an user in the system")
     public String save(@RequestBody Map<String, String> params){
-		User u = new User();
-		u.setEmail(params.get("email"));
-		u.setPassword(params.get("password"));
-		u.setRole(Role.valueOf(params.get("role")));
-		repository.save(u);
-		return ("{message : 'Account created successfully'}");
+		User user = userService.mountUserByParams(params);
+		String error = userService.getErrorsUser(user);
+		if (error == null) {
+			repository.save(user);
+			return ("{message : 'Account created successfully'}");
+		} else {
+			return error;
+		}
     }
 }
