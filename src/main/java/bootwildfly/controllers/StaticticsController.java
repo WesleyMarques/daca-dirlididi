@@ -15,10 +15,6 @@ public class StaticticsController {
 
 	@RequestMapping(method = RequestMethod.GET,path="/statistics",produces = "application/json")
     public Statistics get(){
-		Statistics s = new Statistics();
-		s.problems_you_solved = service.getTotalProblemsYouSolved();
-		s.total_problems = service.getTotalProblem();
-		s.total_users = service.getTotalUsers();
-		return s;
+		return service.getStatistics();
     }
 }
