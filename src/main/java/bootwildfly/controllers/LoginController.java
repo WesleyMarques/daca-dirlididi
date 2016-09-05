@@ -1,17 +1,19 @@
 package bootwildfly.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import bootwildfly.Application;
 import bootwildfly.models.User;
 import bootwildfly.models.repositories.UserRepository;
 import io.jsonwebtoken.Jwts;
@@ -30,26 +32,29 @@ public class LoginController {
 
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "email", value = "User's email", required = true, dataType = "string", paramType = "body") })
-	@RequestMapping(method = RequestMethod.POST, path = "/login", produces = "application/json")
+	@RequestMapping(method = RequestMethod.POST, path = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "application/json")
 	@ApiOperation(value = "Login in the system", notes = "Realizes the login in the sytem")
-	public String login(@RequestBody final String email, @RequestBody final String password) throws ServletException {
-		System.out.println(email+" "+password);
-		User user = userRepository.findOneByEmail(email);
-		if (user == null || user.getPassword() != password) {
-            throw new ServletException("Invalid login");
-        }
-        return ("{token: '"+Jwts.builder().setSubject(email)
+	public String login(@RequestBody final UserLogin userr) throws ServletException {
+		List<User> result = (ArrayList<bootwildfly.models.User>)userRepository.findOneByEmail(userr.email);
+		User user = null;
+		for (User userTemp : result) {
+			if(userTemp.getPassword().equals(userr.password)){
+				user = userTemp;
+			}
+		}
+		if( result.size() == 0 || user == null){
+			throw new ServletException("Invalid login");
+		}
+        return ("{token: '"+Jwts.builder().setSubject(user.getEmail())
             .claim("roles", Arrays.asList(user.getRole())).setIssuedAt(new Date())
             .signWith(SignatureAlgorithm.HS256, "secretkey").compact()+"'}");
 	}
 
-	@SuppressWarnings("unused")
 	private static class UserLogin {
 		public String email;
 		public String password;
 	}
 	
-	@SuppressWarnings("unused")
     private static class LoginResponse {
         public String token;
 

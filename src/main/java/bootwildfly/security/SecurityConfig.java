@@ -1,5 +1,8 @@
 package bootwildfly.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -7,8 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,13 +40,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 		.authorizeRequests()
-        .antMatchers("/","/login").permitAll()
-        .anyRequest().authenticated()
+        .antMatchers("/","/login", "/resources/static/**").permitAll()
+        /*.and()
+        .authorizeRequests()
+        .regexMatchers(HttpMethod.GET, "^/api/users/[\\d]*(\\/)?$").authenticated()
+        .regexMatchers(HttpMethod.GET, "^/api/users(\\/)?(\\?.+)?$").hasRole("ADMIN")
+        .regexMatchers(HttpMethod.DELETE, "^/api/users/[\\d]*(\\/)?$").hasRole("ADMIN")
+        .regexMatchers(HttpMethod.POST, "^/api/users(\\/)?$").hasRole("ADMIN")*/
         .and()
-        .formLogin()
-        .loginPage("/login")
-        .defaultSuccessUrl("/", true)
-        .permitAll()
+        .authorizeRequests()
+        .antMatchers("/api/**").authenticated()
+        .and()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .httpBasic()
         .and()
         .csrf().disable();
         
@@ -55,6 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.invalidateHttpSession(true)		
 		.logoutSuccessUrl("/login?logout")
 		.permitAll();
+	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/resources/static/**");
 	}
 
 	private CsrfTokenRepository csrfTokenRepository() {
@@ -77,8 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			@Override
 			public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-				bootwildfly.models.User user = userRepository.findOneByEmail(email);
-				if (user != null) {
+				List<bootwildfly.models.User> result = (ArrayList<bootwildfly.models.User>)userRepository.findOneByEmail(email);
+				if (result.size() > 0) {
+					bootwildfly.models.User user = result.get(0);
 					return new User(user.getEmail(), user.getPassword(), true, true, true, true,
 							AuthorityUtils.createAuthorityList(user.getRole().toString()));
 				} else {
