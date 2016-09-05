@@ -6,10 +6,12 @@ import static org.hamcrest.Matchers.equalTo;
 import java.util.HashMap;
 import java.util.Map;
 
+import bootwildfly.models.repositories.UserRepository;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -33,23 +35,26 @@ public class AccountControllerIT {
 	@Value("${local.server.port}")
 	private int serverPort;
 
+	@Autowired
+	UserRepository userRepository;
+
 	@Before
 	public void setUp() {
+		userRepository.deleteAll();
 		RestAssured.port = serverPort;
 	}
 	
 	@Test
 	public void postNewAccountTest(){
 		Map<String, String> newAccount= new HashMap<String, String>();
-		newAccount.put("name", "wesley");
 		newAccount.put("email", "wesley@gmail.com");
 		newAccount.put("password", "123456");
-		newAccount.put("type", "normal");
+		newAccount.put("role", "ADMIN");
 		
 		given().
 		formParameters(newAccount)
 		.when()
-		.put(ACCOUNT).then()
+		.post(ACCOUNT).then()
 		.statusCode(HttpStatus.SC_OK)
 		.body("data.message", equalTo("user created successfully"));	
 	}

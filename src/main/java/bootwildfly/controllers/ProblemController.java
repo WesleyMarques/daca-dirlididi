@@ -6,6 +6,7 @@ import bootwildfly.models.Solution;
 import bootwildfly.models.repositories.ProblemRepository;
 import bootwildfly.services.SolutionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.*;
@@ -66,6 +67,7 @@ public class ProblemController {
       })	
 	@RequestMapping(method = RequestMethod.POST, path="/problem", produces = "application/json")
 	@ApiOperation(value = "Saves a problem in the system")
+	@Transactional
     public String save(@RequestBody Problem problem){
         repProblem.save(problem);
 		return ("{message : “Problem created successfully”}");
@@ -86,6 +88,7 @@ public class ProblemController {
       })	
 	@RequestMapping(method = RequestMethod.PUT, path="/problem/{id}", produces = "application/json")
 	@ApiOperation(value = "Updates a problem by Id")
+	@Transactional
     public String update(@PathVariable("id") Long id, @RequestBody Problem problem){
 		problem.setId(id);
 		repProblem.save(problem);
@@ -104,7 +107,7 @@ public class ProblemController {
 	@ApiOperation(value = "Submit a solution to a problem by Id")
 	public List<ProblemTest> submitSolution(@PathVariable("id") Long id, @RequestBody Solution solution){
 		Problem problem = repProblem.findOne(id);
-		List<ProblemTest> failedTests = solutionService.testSolution(problem, solution);
+		List<ProblemTest> failedTests = solutionService.testSolution(solution);
 		if (failedTests.size() == 0) {
 			solutionService.pushSolution(problem, solution);
 		}
