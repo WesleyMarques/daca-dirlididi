@@ -23,7 +23,7 @@ import bootwildfly.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public class InfoControllerIT {
+public class StatisticsControllerIT {
 	private static final String INFO = "/info";
 	
 	@Value("${local.server.port}")

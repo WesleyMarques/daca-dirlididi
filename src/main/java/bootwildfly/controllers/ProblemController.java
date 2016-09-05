@@ -1,8 +1,12 @@
 package bootwildfly.controllers;
 
 import bootwildfly.models.Problem;
+import bootwildfly.models.ProblemTest;
+import bootwildfly.models.Solution;
 import bootwildfly.models.repositories.ProblemRepository;
+import bootwildfly.services.SolutionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.*;
@@ -15,6 +19,9 @@ public class ProblemController {
 
 	@Autowired
 	ProblemRepository repProblem;
+
+	@Autowired
+	SolutionService solutionService;
 
 	@ApiImplicitParams({
         @ApiImplicitParam(
@@ -60,6 +67,7 @@ public class ProblemController {
       })	
 	@RequestMapping(method = RequestMethod.POST, path="/problem", produces = "application/json")
 	@ApiOperation(value = "Saves a problem in the system")
+	@Transactional
     public String save(@RequestBody Problem problem){
         repProblem.save(problem);
 		return ("{message : “Problem created successfully”}");
@@ -80,9 +88,29 @@ public class ProblemController {
       })	
 	@RequestMapping(method = RequestMethod.PUT, path="/problem/{id}", produces = "application/json")
 	@ApiOperation(value = "Updates a problem by Id")
+	@Transactional
     public String update(@PathVariable("id") Long id, @RequestBody Problem problem){
 		problem.setId(id);
 		repProblem.save(problem);
         return ("{message : “Problem edited successfully”}");
     }
+
+	@ApiImplicitParams({
+			@ApiImplicitParam(
+					name = "desc", value = "Solution's description", required = true,
+					dataType = "string", paramType = "body"),
+			@ApiImplicitParam(
+					name = "output", value = "Solution's outputs", required = true,
+					dataType = "string", paramType = "body")
+	})
+	@RequestMapping(method = RequestMethod.POST, path="/problem/{id}/solution", produces = "application/json")
+	@ApiOperation(value = "Submit a solution to a problem by Id")
+	public List<ProblemTest> submitSolution(@PathVariable("id") Long id, @RequestBody Solution solution){
+		Problem problem = repProblem.findOne(id);
+		List<ProblemTest> failedTests = solutionService.testSolution(solution);
+		if (failedTests.size() == 0) {
+			solutionService.pushSolution(problem, solution);
+		}
+		return failedTests;
+	}
 }
