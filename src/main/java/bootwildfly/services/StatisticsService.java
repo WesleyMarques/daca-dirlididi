@@ -1,5 +1,6 @@
 package bootwildfly.services;
 
+import bootwildfly.dto.Statistics;
 import bootwildfly.models.repositories.ProblemRepository;
 import bootwildfly.models.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,23 @@ public class StatisticsService {
 
     public StatisticsService() {}
 
-    public int getTotalUsers() {
+    public Statistics getStatistics() {
+        Statistics s = new Statistics();
+        s.problems_you_solved = getTotalProblemsYouSolved();
+        s.total_problems = getTotalProblem();
+        s.total_users = getTotalUsers();
+        return s;
+    }
+
+    private int getTotalUsers() {
         return (int) repUser.count();
     }
 
-    public int getTotalProblem() {
+    private int getTotalProblem() {
         return (int) repProblem.count();
     }
 
-    public int getTotalProblemsYouSolved() {
+    private int getTotalProblemsYouSolved() {
         return (int) repUser.findAll().get(0).getResolvidos().size();
     }
 }

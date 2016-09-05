@@ -5,6 +5,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.*;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    @JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER)

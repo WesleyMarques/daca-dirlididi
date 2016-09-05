@@ -1,9 +1,9 @@
 package bootwildfly.services;
 
-import java.util.Map;
-
 import bootwildfly.models.Role;
 import bootwildfly.models.User;
+import bootwildfly.models.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,25 +11,20 @@ public class UserService {
 	
 	public UserService() {}
 
-	public User mountUserByParams(Map<String, String> params) {
-		User u = new User();
-		u.setEmail(params.get("email"));
-		u.setPassword(params.get("password"));
-		u.setRole(Role.valueOf(params.get("role")));
-		return u;
-	}
+	@Autowired
+	private UserRepository userRep;
 
 	public String getErrorsUser(User user) {
 		if (!isValidEmail(user.getEmail()) || !isValidPassword(user.getPassword())) {
-			return "Email or Password required";
+			return "Email or Password invalid";
 		} else if (!isValidRole(user.getRole())) {
-			return "Role required";
+			return "Role invalid";
 		}
 		return null;
 	}
 
 	private boolean isValidEmail(String email) {
-		return email != null && !email.equals("");
+		return email != null && !email.equals("") && userRep.findOneByEmail(email) == null;
 	}
 
 	private boolean isValidPassword(String password) {

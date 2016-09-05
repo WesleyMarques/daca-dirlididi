@@ -44,14 +44,13 @@ public class AccountController {
       })
 	@RequestMapping(method = RequestMethod.POST, path="/account", produces = "application/json")
 	@ApiOperation(value = "Saves an user in the system", notes = "Saves an user in the system")
-    public String save(@RequestBody Map<String, String> params){
-		User user = userService.mountUserByParams(params);
+    public String save(@RequestBody User user){
 		String error = userService.getErrorsUser(user);
 		if (error == null) {
 			repository.save(user);
 			return ("{message : 'Account created successfully'}");
 		} else {
-			return error;
+			return "{error :'" + error + "'}";
 		}
     }
 }
