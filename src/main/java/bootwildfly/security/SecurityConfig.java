@@ -16,8 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.session.web.http.HeaderHttpSessionStrategy;
-import org.springframework.session.web.http.HttpSessionStrategy;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import bootwildfly.models.repositories.UserRepository;
 
@@ -26,43 +25,42 @@ import bootwildfly.models.repositories.UserRepository;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//	@Override
-//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
-//	}
+	// @Override
+	// protected void configure(AuthenticationManagerBuilder auth) throws
+	// Exception {
+	// auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+	// }
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-		.httpBasic()
-		.and()
 		.authorizeRequests()
-        .antMatchers("/login").permitAll()
+        .antMatchers("/","/login").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin()
-        .usernameParameter("email")
-        .passwordParameter("password")
+        .loginPage("/login")
         .defaultSuccessUrl("/", true)
         .permitAll()
         .and()
         .csrf().disable();
+        
+		http.sessionManagement()
+        .maximumSessions(1)
+        .maxSessionsPreventsLogin(true)
+        .expiredUrl("/login?expired");
 		
 		http.logout()
-		.logoutUrl("/logout")
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 		.invalidateHttpSession(true)		
-		.logoutSuccessUrl("/login");
+		.logoutSuccessUrl("/login?logout")
+		.permitAll();
 	}
-	
-	private CsrfTokenRepository csrfTokenRepository() {
-		  HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		  repository.setHeaderName("X-XSRF-TOKEN");
-		  return repository;
-		}
 
-	@Bean
-	public HttpSessionStrategy httpSessionStrategy() {
-		return new HeaderHttpSessionStrategy();
+	private CsrfTokenRepository csrfTokenRepository() {
+		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+		repository.setHeaderName("X-XSRF-TOKEN");
+		return repository;
 	}
 
 	@Autowired
