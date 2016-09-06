@@ -13,8 +13,17 @@ function authService($http) {
 
     return Service;
 
-    function login(data) {
-       return $http.post('/login', data);            
+    function login(data, scope) {
+       return $http.post('/login', data)
+         .success(function(data) {
+             console.log(data);
+             window.location.href = "/";
+             Service.token = data;
+         })
+         .error(function(data) {
+             scope.error = data.message;
+             console.log(data);
+         });
     }
 
     function logout() {
@@ -24,7 +33,7 @@ function authService($http) {
                 Service.token = "";
             })
             .error(function(data) {
-                console.log('Error: ' + data);
+                console.log(data);
             });
     }
 
