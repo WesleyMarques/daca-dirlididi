@@ -1,11 +1,5 @@
-package integration.repositories;
+package repositories;
 
-import bootwildfly.Application;
-import bootwildfly.models.*;
-import bootwildfly.models.repositories.ProblemRepository;
-import bootwildfly.models.repositories.ProblemTestRepository;
-import bootwildfly.models.repositories.SolutionRepository;
-import bootwildfly.models.repositories.UserRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +10,17 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.List;
+import bootwildfly.Application;
+import bootwildfly.models.Output;
+import bootwildfly.models.Problem;
+import bootwildfly.models.ProblemTest;
+import bootwildfly.models.Role;
+import bootwildfly.models.Solution;
+import bootwildfly.models.User;
+import bootwildfly.models.repositories.ProblemRepository;
+import bootwildfly.models.repositories.ProblemTestRepository;
+import bootwildfly.models.repositories.SolutionRepository;
+import bootwildfly.models.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)

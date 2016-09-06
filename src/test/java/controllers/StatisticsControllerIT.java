@@ -1,4 +1,4 @@
-package integration.controllers;
+package controllers;
 
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
@@ -14,8 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.jayway.restassured.RestAssured;
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
 
 import bootwildfly.Application;
 
