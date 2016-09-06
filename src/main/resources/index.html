@@ -1,26 +1,27 @@
-<html ng-app="MyApp">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8"/>
   <title>Daca Dirlididi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="/scripts/angular.min.js"></script>
   <script src="/scripts/angular-route.min.js"></script>
   <script src="/scripts/config.js"></script>
 
-  <script src="scripts/controllers/login.controller.js"></script>
-  <script src="scripts/controllers/main.controller.js"></script>
-  <script src="scripts/controllers/problem.controller.js"></script>
+  <script src="/scripts/controllers/login.controller.js"></script>
+  <script src="/scripts/controllers/main.controller.js"></script>
+  <script src="/scripts/controllers/problem.controller.js"></script>
 
-  <script src="scripts/services/account.service.js"></script>
-  <script src="scripts/services/auth.service.js"></script>
-  <script src="scripts/services/problem.service.js"></script>
-  <script src="scripts/services/statistics.service.js"></script>
-  <script src="scripts/services/authInterceptor.service.js"></script>
+  <script src="/scripts/services/account.service.js"></script>
+  <script src="/scripts/services/auth.service.js"></script>
+  <script src="/scripts/services/problem.service.js"></script>
+  <script src="/scripts/services/statistics.service.js"></script>
+  <script src="/scripts/services/authInterceptor.service.js"></script>
 </head>
-<body>
+<body ng-app="MyApp">
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -37,6 +38,8 @@
       </div>
     </div>
   </nav>
-  <div style="margin-top: 60px;" ng-view></div>
+  <div style="margin-top: 60px;">
+    <ng-view></ng-view>
+  </div>
 </body>
 </html>
