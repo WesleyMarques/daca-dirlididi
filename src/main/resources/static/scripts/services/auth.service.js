@@ -13,15 +13,8 @@ function authService($http) {
 
     return Service;
 
-    function login() {
-        $http.post('/login')
-            .success(function(data) {
-                console.log(data);
-                Service.token = data;
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
+    function login(data) {
+       return $http.post('/login', data);            
     }
 
     function logout() {
@@ -36,6 +29,6 @@ function authService($http) {
     }
 
     function isAuthenticated() {
-        return Service.token != "";
+        return !!window.localStorage.token;
     }
 }

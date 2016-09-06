@@ -2,9 +2,9 @@
     angular.module('MyApp')
         .controller('MainCtrl', MainCtrl);
 
-    MainCtrl.$inject = [];
+    MainCtrl.$inject = ['Auth'];
 
-    function MainCtrl() {
+    function MainCtrl(Auth) {
         var bc = this;
 
         //bc.liSvc = Livro;
@@ -13,6 +13,10 @@
             //var li = angular.copy(livro);
             //li.comentarios = [];
             //Livro.create(li);
+        }
+
+        bc.isAuth = function(){
+            return Auth.isAuthenticated()
         }
 
     }

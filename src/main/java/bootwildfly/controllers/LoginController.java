@@ -45,10 +45,10 @@ public class LoginController {
 		if( result.size() == 0 || user == null){
 			throw new ServletException("Invalid login");
 		}
-        return ("{token: '"+Jwts.builder().setSubject(user.getEmail())
+        return ("{\"token\": \""+Jwts.builder().setSubject(user.getEmail())
             .claim("roles", Arrays.asList(user.getRole())).setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis()*2))
-            .signWith(SignatureAlgorithm.HS256, "secretkey").compact()+"'}");
+            .signWith(SignatureAlgorithm.HS256, "secretkey").compact()+"\"}");
 	}
 
 	private static class UserLogin {
