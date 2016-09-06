@@ -5,6 +5,7 @@
 *.class
 .idea
 *.iml
+!*test.iml
 *.yml
 
 # Mobile Tools for Java (J2ME)
