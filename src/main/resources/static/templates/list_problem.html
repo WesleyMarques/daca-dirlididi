@@ -1,0 +1,19 @@
+<div class="container">
+  <table datatable="" class="row-border hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>First name</th>
+      <th>Last name</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr ng-repeat="problem in pc.problemSvc.data">
+      <td>{{problem.id}}</td>
+      <td>{{problem.name}}</td>
+      <td>{{problem.description}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

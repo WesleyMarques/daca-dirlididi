@@ -2,17 +2,15 @@
     angular.module('MyApp')
         .controller('ProblemCtrl', ProblemCtrl);
 
-    ProblemCtrl.$inject = [];
+    ProblemCtrl.$inject = ['Problem'];
 
-    function ProblemCtrl() {
-        var bc = this;
+    function ProblemCtrl(Problem) {
+        var pc = this;
 
-        //bc.liSvc = Livro;
+        Problem.refresh()
+        pc.problemsSvc = Problem;
 
-        bc.addLivro = function(livro) {
-            //var li = angular.copy(livro);
-            //li.comentarios = [];
-            //Livro.create(li);
+        pc.get = function(problem) {
         }
 
     }

@@ -2,9 +2,12 @@ angular.module('MyApp').factory('authInterceptor', function($rootScope, $q) {
   return {
     request: function(config) {
       config.headers = config.headers || {};
-      console.log("tokenlocal", window.localStorage.token);
+      console.log("token", JSON.stringify(window.localStorage.getItem('token')));
       if (window.localStorage.token) {
-        config.headers.Authorization = 'Bearer ' + window.localStorage.token;
+        var token = window.localStorage.token;
+        var baerer = "Bearer " + token.substring(0, token.length);
+        console.log(baerer);
+        config.headers.Authorization = baerer;
       }
       return config;
     },

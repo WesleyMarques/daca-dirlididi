@@ -17,7 +17,7 @@ function authService($http) {
     return $http.post('/login', data)
       .success(function(data) {
         console.log(data);
-        window.localStorage.setItem('token', data);
+        window.localStorage.setItem('token', data.token);
         window.location.href = "/";
         Service.token = data;
       })

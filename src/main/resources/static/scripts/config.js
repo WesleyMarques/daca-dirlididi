@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('MyApp', ['ngRoute'])
+angular.module('MyApp', ['ngRoute', 'datatables'])
     .config(['$routeProvider', '$locationProvider', '$interpolateProvider', configApp]);
 
 function configApp($routeProvider, $locationProvider) {
