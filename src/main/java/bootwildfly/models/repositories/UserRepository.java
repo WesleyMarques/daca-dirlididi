@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    List<User> findOneByEmail(String email);
-    
+    User findOneByEmail(String email);
 
     @Override
     List<User> findAll();

@@ -34,21 +34,16 @@ public class LoginController {
 			@ApiImplicitParam(name = "email", value = "User's email", required = true, dataType = "string", paramType = "body") })
 	@RequestMapping(method = RequestMethod.POST, path = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "application/json")
 	@ApiOperation(value = "Login in the system", notes = "Realizes the login in the sytem")
-	public String login(@RequestBody final UserLogin userr) throws ServletException {
-		List<User> result = (ArrayList<bootwildfly.models.User>)userRepository.findOneByEmail(userr.email);
-		User user = null;
-		for (User userTemp : result) {
-			if(userTemp.getPassword().equals(userr.password)){
-				user = userTemp;
-			}
+	public String login(@RequestBody final User user) throws ServletException {
+		User result = userRepository.findOneByEmail(user.getEmail());
+		if(result == null || !result.getPassword().equals(user.getPassword()) ){
+			throw new ServletException("Invalid login or password");
+		} else {
+			return ("{\"token\": \""+Jwts.builder().setSubject(user.getEmail())
+					.claim("roles", Arrays.asList(user.getRole())).setIssuedAt(new Date())
+					.setExpiration(new Date(System.currentTimeMillis()*2))
+					.signWith(SignatureAlgorithm.HS256, "secretkey").compact()+"\"}");
 		}
-		if( result.size() == 0 || user == null){
-			throw new ServletException("Invalid login");
-		}
-        return ("{\"token\": \""+Jwts.builder().setSubject(user.getEmail())
-            .claim("roles", Arrays.asList(user.getRole())).setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis()*2))
-            .signWith(SignatureAlgorithm.HS256, "secretkey").compact()+"\"}");
 	}
 
 	private static class UserLogin {

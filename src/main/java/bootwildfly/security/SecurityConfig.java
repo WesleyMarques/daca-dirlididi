@@ -77,11 +77,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			@Override
 			public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-				List<bootwildfly.models.User> result = (ArrayList<bootwildfly.models.User>)userRepository.findOneByEmail(email);
-				if (result.size() > 0) {
-					bootwildfly.models.User user = result.get(0);
-					return new User(user.getEmail(), user.getPassword(), true, true, true, true,
-							AuthorityUtils.createAuthorityList(user.getRole().toString()));
+				bootwildfly.models.User result = userRepository.findOneByEmail(email);
+				if (result != null) {
+					return new User(result.getEmail(), result.getPassword(), true, true, true, true,
+							AuthorityUtils.createAuthorityList(result.getRole().toString()));
 				} else {
 					throw new UsernameNotFoundException("could not find the user '" + email + "'");
 				}
