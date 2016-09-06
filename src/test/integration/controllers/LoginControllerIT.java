@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.internal.path.json.JSONAssertion;
+
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -35,8 +37,9 @@ public class LoginControllerIT {
 	
 	@Test
 	public void doLoginTest(){
-		given().formParam("email", "wesley@gmail.com")
-		.formParam("password", "123456")
+		String json = "{\"email\":\"daca\", \"password\":\"daca\"}";
+		given().body(json)
+		.contentType("application/json; charset=UTF-8")		
 		.when().post(LOGIN)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
