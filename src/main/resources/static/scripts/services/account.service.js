@@ -1,6 +1,6 @@
 angular
-    .module('MyApp')
-    .service('Account', accountService);
+  .module('MyApp')
+  .service('Account', accountService);
 
 accountService.$inject = ['$http'];
 
@@ -14,12 +14,12 @@ function accountService($http) {
 
     function refresh() {
         $http.get('/api/account')
-            .success(function(data) {
-                console.log(data);
-                Service.account = data;
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
+          .success(function(data) {
+              console.log(data);
+              Service.account = data;
+          })
+          .error(function(data) {
+              console.log('Error: ' + data);
+          });
     }
 }
