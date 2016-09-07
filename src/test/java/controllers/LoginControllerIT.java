@@ -5,6 +5,8 @@ import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,14 +36,14 @@ public class LoginControllerIT {
 	}
 	
 	@Test
-	public void doLoginTest(){
-		String json = "{\"email\":\"daca\", \"password\":\"daca\"}";
-		given().body(json)
+	public void doLoginTest() throws JSONException{
+		JSONObject js = new JSONObject("{\"email\": \"daca\", \"password\": \"daca\"}");
+		given().body(js.toString())
 		.contentType("application/json; charset=UTF-8")		
 		.when().post(LOGIN)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data.message", equalTo("login successful"));
+		.body("data", equalTo("login successful"));
 	}
 	
 	@Test
