@@ -1,10 +1,12 @@
 package controllers;
 
+import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.apache.http.HttpStatus;
-import org.junit.Assert;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,13 +18,12 @@ import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfig
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.google.common.net.MediaType;
 import com.jayway.restassured.RestAssured;
 
 import bootwildfly.Application;
@@ -32,7 +33,8 @@ import bootwildfly.Application;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public class AccountControllerIT {
-	private static final String ACCOUNT = "/account";
+	private static final String ACCOUNT = "/api/account";
+	private final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYWNhIiwicm9sZXMiOltudWxsXSwiaWF0IjoxNDczMjA5NzE3LCJleHAiOjI5NDY0MTk0MzV9.4bA5G4pqTuk96S5-o2cvKKsVVN7-v2G0PLCqELlAxoY";
 
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -52,21 +54,17 @@ public class AccountControllerIT {
 	}
 	
 	@Test
-	public void postNewAccountTest(){
-		MultiValueMap<String, String> newAccount= new LinkedMultiValueMap<String, String>();
-		newAccount.add("email", "wesley@gmail.com");
-		newAccount.add("password", "123456");
-		newAccount.add("role", "ADMIN");
-		MockHttpServletRequestBuilder requestBuilder =
-				MockMvcRequestBuilders.post(ACCOUNT)
-						.contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-						.params(newAccount);
-		try {
-			Assert.assertTrue(
-					mvc.perform(requestBuilder).andReturn().getResponse().getStatus() == HttpStatus.SC_OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void postNewAccountTest() throws JSONException{
+		JSONObject json = new JSONObject();
+		json.put("email", "wesley@gmail.com");
+		json.put("password", "123456");
+		json.put("role", "ADMIN");		
+		given().header("Authorization", TOKEN).
+		contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE).
+		body(json.toString()).
+        when().post(ACCOUNT).
+        then().statusCode(HttpStatus.SC_OK)
+        .body("message", equalTo("Account created successfully"));
 	}
 	
 	@Test

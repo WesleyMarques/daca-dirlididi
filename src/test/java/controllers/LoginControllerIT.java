@@ -17,6 +17,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Response;
 
 import bootwildfly.Application;
 
@@ -27,6 +29,8 @@ import bootwildfly.Application;
 public class LoginControllerIT {
 	private static final String LOGIN = "/login";
 	private static final String LOGOUT = "/logout";
+	public static Response response;
+	private String token = "";
 	@Value("${local.server.port}")
 	private int serverPort;
 
@@ -37,38 +41,42 @@ public class LoginControllerIT {
 	
 	@Test
 	public void doLoginTest() throws JSONException{
-		JSONObject js = new JSONObject("{\"email\": \"daca\", \"password\": \"daca\"}");
-		given().body(js.toString())
+		JSONObject js = new JSONObject("{\"email\":\"daca\", \"password\":\"daca\"}");
+		response = given().body(js.toString())
 		.contentType("application/json; charset=UTF-8")		
 		.when().post(LOGIN)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data", equalTo("login successful"));
+		.contentType(ContentType.JSON).  // check that the content type return from the API is JSON
+        extract().response();
+		
+		token = response.asString();
 	}
 	
 	@Test
-	public void dontLoginTest(){
-		given().formParam("email", "wesley@gmail.com")
-		.formParam("password", "12345")
+	public void dontLoginTest() throws JSONException{
+		JSONObject js = new JSONObject("{\"email\":\"daca\", \"password\":\"dac\"}");
+		given().body(js.toString())
+		.contentType("application/json; charset=UTF-8")
 		.when().post(LOGIN)
 		.then()
-		.statusCode(HttpStatus.SC_NOT_FOUND)
-		.body("data.message", equalTo("login unsuccessful"));
+		.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+		.body("message", equalTo("Invalid login or password"));
 	}
 	
-	@Test
-	public void doLogoutTest(){
-		when().post(LOGOUT)
-		.then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("data.message", equalTo("logout successful"));
-	}
-	
-	public void dontLogoutTest(){
-		when().post(LOGOUT)
-		.then()
-		.statusCode(HttpStatus.SC_NOT_FOUND)
-		.body("data.message", equalTo("logout unsuccessful"));
-	}
+//	@Test
+//	public void doLogoutTest(){
+//		when().post(LOGOUT)
+//		.then()
+//		.statusCode(HttpStatus.SC_OK)
+//		.body("data.message", equalTo("logout successful"));
+//	}
+//	
+//	public void dontLogoutTest(){
+//		when().post(LOGOUT)
+//		.then()
+//		.statusCode(HttpStatus.SC_NOT_FOUND)
+//		.body("data.message", equalTo("logout unsuccessful"));
+//	}
 
 }
