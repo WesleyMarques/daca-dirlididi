@@ -26,8 +26,6 @@ public class LoginController {
 	@Autowired
 	UserRepository userRepository;
 
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "email", value = "User's email", required = true, dataType = "string", paramType = "body") })
 	@RequestMapping(method = RequestMethod.POST, path = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "application/json")
 	@ApiOperation(value = "Login in the system", notes = "Realizes the login in the sytem")
 	public String login(@RequestBody final User user) throws ServletException {

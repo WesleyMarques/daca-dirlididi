@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(value="problem", description="Operations about problem")
 @RestController
 public class ProblemController {
 

@@ -1,7 +1,9 @@
 package bootwildfly;
 
+import com.google.common.base.Predicates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -9,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.cglib.core.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +25,10 @@ import bootwildfly.models.repositories.ProblemRepository;
 import bootwildfly.models.repositories.ProblemTestRepository;
 import bootwildfly.models.repositories.UserRepository;
 import bootwildfly.security.JwtFilter;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
@@ -41,6 +48,14 @@ public class Application extends SpringBootServletInitializer {
 
         return registrationBean;
     }
+
+	@Bean
+	public Docket swaggerSpringMvcPlugin() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.paths(Predicates.not(PathSelectors.regex("/error")))
+				.paths(Predicates.not(PathSelectors.regex("/error")))
+				.build();
+	}
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

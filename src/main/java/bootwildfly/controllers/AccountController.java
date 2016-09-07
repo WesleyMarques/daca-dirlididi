@@ -32,15 +32,6 @@ public class AccountController {
 		return repository.findAll();
     }
 
-	@ApiImplicitParams({
-        @ApiImplicitParam(
-        	name = "name", value = "User's name", required = true, dataType = "string", paramType = "body"),
-        @ApiImplicitParam(
-            	name = "email", value = "User's email", required = true, dataType = "string", paramType = "body"),
-        @ApiImplicitParam(
-            	name = "type", value = "User's type (normal|admin)", required = true,
-            	dataType = "string", paramType = "body")
-      })
 	@RequestMapping(method = RequestMethod.POST, path="/account", produces = "application/json")
 	@ApiOperation(value = "Saves an user in the system", notes = "Saves an user in the system")
 	@Transactional
