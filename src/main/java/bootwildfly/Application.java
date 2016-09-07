@@ -1,5 +1,6 @@
 package bootwildfly;
 
+import bootwildfly.controllers.ProblemController;
 import com.google.common.base.Predicates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,28 +33,21 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@ComponentScan
 @EnableAutoConfiguration
 @EnableSwagger2
+@ComponentScan
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 	
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
-	
-	@Bean
-    public FilterRegistrationBean jwtFilter() {
-        final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/api/*");
 
-        return registrationBean;
-    }
 
 	@Bean
 	public Docket swaggerSpringMvcPlugin() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select().paths(PathSelectors.any())
 				.paths(Predicates.not(PathSelectors.regex("/error")))
-				.paths(Predicates.not(PathSelectors.regex("/error")))
+				.paths(Predicates.not(PathSelectors.regex("angular")))
 				.build();
 	}
 
