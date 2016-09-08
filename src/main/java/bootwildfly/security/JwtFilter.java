@@ -32,15 +32,17 @@ public class JwtFilter extends GenericFilterBean {
     private String USER_SESSION_KEY;
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
+
 	@Override
     public void doFilter(final ServletRequest req,
                          final ServletResponse res,
                          final FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
-        log.info("FILTERRRRRRRRRRRRR");
-        if (request.getRequestURI().matches("^/api")) {
 
-            final String authHeader = request.getHeader("Authorization");
+        if (request.getRequestURI().matches("^/api/[A-Z,a-z,0-9]*")) {
+            log.error("ASJDAJSDJASDASDJASDJAJ+++++++++++++++++++++++++++++++");
+            log.error(request.getHeader("authorization"));
+            final String authHeader = request.getHeader("authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 throw new ServletException("Missing or invalid Authorization header.");
             }

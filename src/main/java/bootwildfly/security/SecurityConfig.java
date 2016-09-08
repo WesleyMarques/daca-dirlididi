@@ -38,15 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .antMatcher("/api/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/resources/static/**").permitAll()
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/**").authenticated()
-                .and()
-
-                .anonymous().disable();
+                .antMatchers("/", "/login", "/resources/static/**").permitAll();
 
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
