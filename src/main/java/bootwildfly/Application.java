@@ -41,7 +41,6 @@ public class Application extends SpringBootServletInitializer {
 	
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-
 	@Bean
 	public Docket swaggerSpringMvcPlugin() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -49,6 +48,15 @@ public class Application extends SpringBootServletInitializer {
 				.paths(Predicates.not(PathSelectors.regex("/error")))
 				.paths(Predicates.not(PathSelectors.regex("angular")))
 				.build();
+	}
+
+	@Bean
+	public FilterRegistrationBean jwtFilter() {
+		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+		registrationBean.setFilter(new JwtFilter());
+		registrationBean.addUrlPatterns("/api/*");
+
+		return registrationBean;
 	}
 
     public static void main(String[] args) {

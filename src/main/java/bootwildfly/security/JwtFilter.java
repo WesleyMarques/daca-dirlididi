@@ -8,10 +8,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import bootwildfly.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.google.common.base.Strings;
@@ -20,36 +25,41 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 
+@Component
 public class JwtFilter extends GenericFilterBean {
 
     private String TOKEN_SESSION_KEY;
     private String USER_SESSION_KEY;
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
 	@Override
     public void doFilter(final ServletRequest req,
                          final ServletResponse res,
                          final FilterChain chain) throws IOException, ServletException {
-        final HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletRequest request = (HttpServletRequest) req;
+        log.info("FILTERRRRRRRRRRRRR");
+        if (request.getRequestURI().matches("^/api")) {
 
-        final String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new ServletException("Missing or invalid Authorization header.");
-        }
+            final String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                throw new ServletException("Missing or invalid Authorization header.");
+            }
 
-        final String token = authHeader.substring(7); // The part after "Bearer "
-        TOKEN_SESSION_KEY = token;
-        
-
-        try {
-            final Claims claims = Jwts.parser().setSigningKey("secretkey")
-                .parseClaimsJws(token).getBody();
-            request.setAttribute("claims", claims);
-            USER_SESSION_KEY = claims.getSubject();
+            final String token = authHeader.substring(7); // The part after "Bearer "
+            TOKEN_SESSION_KEY = token;
+            try {
+                final Claims claims = Jwts.parser().setSigningKey("secretkey")
+                        .parseClaimsJws(token).getBody();
+                request.setAttribute("claims", claims);
+                log.info(claims.toString());
+                USER_SESSION_KEY = claims.getSubject();
+            }
+            catch (final SignatureException e) {
+                log.info("AEAWEAW Invalid Token");
+                throw new ServletException("Invalid token.");
+            }
+            addSessionContextToLogging();
         }
-        catch (final SignatureException e) {
-            throw new ServletException("Invalid token.");
-        }
-        addSessionContextToLogging();
         chain.doFilter(req, res);
     }
     
