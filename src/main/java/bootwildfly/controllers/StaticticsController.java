@@ -18,7 +18,7 @@ public class StaticticsController {
 	@Autowired
 	StatisticsService service;
 
-	@RequestMapping(method = RequestMethod.GET,path="/statistics",produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET,path="/api/statistics",produces = "application/json")
 	@ApiOperation(value = "Returns the general statistics about the system",
 			notes = "Return the json object relative to statistics")
     public Statistics get(){

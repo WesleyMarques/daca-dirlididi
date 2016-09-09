@@ -1,5 +1,6 @@
 package controllers;
 
+import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -22,7 +23,8 @@ import bootwildfly.Application;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public class StatisticsControllerIT {
-	private static final String INFO = "/info";
+	private static final String STATISTICS = "/api/statistics";
+	private final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYWNhIiwicm9sZXMiOltudWxsXSwiaWF0IjoxNDczMjA5NzE3LCJleHAiOjI5NDY0MTk0MzV9.4bA5G4pqTuk96S5-o2cvKKsVVN7-v2G0PLCqELlAxoY";
 	
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -31,20 +33,15 @@ public class StatisticsControllerIT {
 	public void setUp() {
 		RestAssured.port = serverPort;
 	}
-	
-	
-	
-	@Test
-	public void getAccountTest(){
-		
-		when()
-		.get(INFO).then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("data.total_users", equalTo(15))
-		.body("data.total_problems", equalTo(10))
-		.body("data.problems_you_solved", equalTo(5));
-	}
-	
-	
 
+	@Test
+	public void testGetStatistics() {
+		given().header("Authorization", TOKEN)
+				.when()
+				.get(STATISTICS).then()
+				.statusCode(HttpStatus.SC_OK)
+				.body("total_users", equalTo(1))
+				.body("total_problems", equalTo(1))
+				.body("problems_you_solved", equalTo(1));
+	}
 }
