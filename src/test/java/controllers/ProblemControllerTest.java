@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import bootwildfly.Application;
 
@@ -29,7 +31,7 @@ import bootwildfly.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public class ProblemControllerIT {
+public class ProblemControllerTest {
 
 	private final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYWNhIiwicm9sZXMiOltudWxsXSwiaWF0IjoxNDczMjA5NzE3LCJleHAiOjI5NDY0MTk0MzV9.4bA5G4pqTuk96S5-o2cvKKsVVN7-v2G0PLCqELlAxoY";
 
@@ -62,12 +64,12 @@ public class ProblemControllerIT {
 		.when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("name", equalTo("Problem name"));
+		.body("name", equalTo("problem name"));
 	}
 	
 	@Test
-	public void putProblemTest(){
-		Map<String, String> updateProblem= new HashMap<String, String>();
+	public void putProblemTest() throws JSONException{		
+		JSONObject updateProblem = new JSONObject();
 		updateProblem.put("name", "problem 190");
 		updateProblem.put("description", "nova descricao");
 		updateProblem.put("tip", "dica para o problema");
@@ -104,8 +106,8 @@ public class ProblemControllerIT {
 	}
 	
 	@Test
-	public void postNewProblemTest(){
-		Map<String, String> newProblem= new HashMap<String, String>();
+	public void postNewProblemTest() throws JSONException{
+		JSONObject newProblem = new JSONObject();
 		newProblem.put("name", "problem 1");
 		newProblem.put("description", "descricao ...");
 		newProblem.put("tip", "dica para o problema...");
