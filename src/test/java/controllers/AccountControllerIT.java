@@ -4,6 +4,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
+import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,12 +69,15 @@ public class AccountControllerIT {
 	}
 	
 	@Test
-	public void getAccountTest(){
-		
+	public void getAccountTest() throws JSONException {
+
+		Response response = given().header("Authorization", TOKEN).
 		when()
 		.get(ACCOUNT).then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data.email", equalTo("wesley@gmail.com"));	
+				.body("email", equalTo("daca"))
+				.extract().response();
+		System.out.print(response.getBody().print());
 	}
 	
 	

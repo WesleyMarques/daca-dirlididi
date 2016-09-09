@@ -1,8 +1,12 @@
 package controllers;
 
+import bootwildfly.models.repositories.ProblemRepository;
+import bootwildfly.models.repositories.UserRepository;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -26,11 +30,17 @@ import bootwildfly.Application;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public class ProblemControllerIT {
-	private static final String PROBLEM = "/problem";
-	private static final String PROBLEM_ID = "/problem/{id}";
-	private static final String PROBLEM_STATUS = "/problem/{id}/status";
+
+	private final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYWNhIiwicm9sZXMiOltudWxsXSwiaWF0IjoxNDczMjA5NzE3LCJleHAiOjI5NDY0MTk0MzV9.4bA5G4pqTuk96S5-o2cvKKsVVN7-v2G0PLCqELlAxoY";
+
+	private static final String PROBLEM = "/api/problem";
+	private static final String PROBLEM_ID = "/api/problem/{id}";
+
 	@Value("${local.server.port}")
 	private int serverPort;
+
+	@Autowired
+	ProblemRepository problemRepository;
 
 	@Before
 	public void setUp() {
@@ -39,87 +49,75 @@ public class ProblemControllerIT {
 	
 	@Test
 	public void getAllProblemsTest(){
-		when().get(PROBLEM)
-		.then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("data.findAll{}.name", hasItems("problema 1"));
+		given().header("Authorization", TOKEN)
+		.when().get(PROBLEM)
+		.then().statusCode(HttpStatus.SC_OK)
+		.body("get(0).name", equalTo("Problem name"));
 	}
-	
-	@Test
-	public void postStatusTest(){
-		given()
-        .pathParam("id", "1")
-        .formParam("status", "solved")
-		.when().post(PROBLEM_STATUS)
-		.then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("data.message", equalTo("The problem was marked as solved"));
-	}
-	
+
 	@Test
 	public void getProblemByIdTest(){
-		given().
-        pathParam("id", "10").
-		when().get(PROBLEM_ID)
+		given().header("Authorization", TOKEN)
+        .pathParam("id", "1")
+		.when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data.findAll{it.id == 10}.name", hasItems("problema 10"));
+		.body("name", equalTo("Problem name"));
 	}
 	
 	@Test
 	public void putProblemTest(){
 		Map<String, String> updateProblem= new HashMap<String, String>();
-		updateProblem.put("name", "problem 1");
-		updateProblem.put("desc", "nova descricao ...");
-		updateProblem.put("dica", "dica para o problema...");
-		updateProblem.put("testes", "testes");
-		
-		given().
-		pathParam("id", "1").
-		formParameters(updateProblem)
+		updateProblem.put("name", "problem 190");
+		updateProblem.put("description", "nova descricao");
+		updateProblem.put("tip", "dica para o problema");
+
+		given().header("Authorization", TOKEN)
+		.contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
+		.pathParam("id", "1")
+		.body(updateProblem.toString())
 		.when()
 		.put(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data.message", equalTo("Problem altered successfully"));	
+		.body("message", equalTo("Problem updated successfully"));
+
+		Assert.assertTrue(problemRepository.findOne(1L).getName().equals("problem 190"));
 	}
 	
 	@Test
-	public void deleteProblemTest(){		
-		given().
-		pathParam("id", "1")
+	public void deleteProblemTest(){
+		given().header("Authorization", TOKEN)
+		.pathParam("id", "1")
 		.delete(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data.message", equalTo("Problem removed successfully"));
-		
-		given().
-        pathParam("id", "1").
-		when().get(PROBLEM_ID)
+		.body("message", equalTo("Problem deleted successfully"));
+
+		given().header("Authorization", TOKEN)
+        .pathParam("id", "1")
+		.when().get(PROBLEM_ID)
 		.then()
-		.statusCode(HttpStatus.SC_NOT_FOUND);
+		.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+
+		Assert.assertTrue(problemRepository.count() == 0);
 	}
 	
 	@Test
 	public void postNewProblemTest(){
 		Map<String, String> newProblem= new HashMap<String, String>();
 		newProblem.put("name", "problem 1");
-		newProblem.put("desc", "descricao ...");
-		newProblem.put("dica", "dica para o problema...");
-		newProblem.put("testes", "testes");
-		
-		given().
-		formParameters(newProblem)
+		newProblem.put("description", "descricao ...");
+		newProblem.put("tip", "dica para o problema...");
+
+		given().header("Authorization", TOKEN)
+		.contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
+		.body(newProblem.toString())
+		.when()
 		.post(PROBLEM).then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("data.message", equalTo("Problem created successfully"));
-		
-		given().
-        pathParam("id", 1).
-		when().get(PROBLEM_ID)
-		.then()
-		.statusCode(HttpStatus.SC_OK)
-		.body("data.findAll{it.id == 1}.name", hasItems("problema 1"));		
+		.body("message", equalTo("Problem created successfully"));
+
 	}
 
 }

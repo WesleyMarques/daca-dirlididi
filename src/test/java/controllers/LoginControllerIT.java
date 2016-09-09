@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ public class LoginControllerIT {
 	}
 	
 	@Test
-	public void doLoginTest() throws JSONException{
+	public void testLoginSuccessful() throws JSONException{
 		JSONObject js = new JSONObject("{\"email\":\"daca\", \"password\":\"daca\"}");
 		response = given().body(js.toString())
 		.contentType("application/json; charset=UTF-8")		
@@ -49,12 +50,13 @@ public class LoginControllerIT {
 		.statusCode(HttpStatus.SC_OK)
 		.contentType(ContentType.JSON).  // check that the content type return from the API is JSON
         extract().response();
-		
+
+		Assert.assertTrue(response != null);
 		token = response.asString();
 	}
 	
 	@Test
-	public void dontLoginTest() throws JSONException{
+	public void testLoginFailed() throws JSONException{
 		JSONObject js = new JSONObject("{\"email\":\"daca\", \"password\":\"dac\"}");
 		given().body(js.toString())
 		.contentType("application/json; charset=UTF-8")
