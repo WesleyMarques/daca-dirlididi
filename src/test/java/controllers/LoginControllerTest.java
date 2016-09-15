@@ -31,7 +31,7 @@ import bootwildfly.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public class LoginControllerIT {
+public class LoginControllerTest {
 	private static final String LOGIN = "/login";
 	private static final String LOGOUT = "/logout";
 	public static Response response;
@@ -55,7 +55,9 @@ public class LoginControllerIT {
 	
 	@Test
 	public void testLoginSuccessful() throws JSONException{
-		JSONObject js = new JSONObject("{\"email\":\"daca\", \"password\":\"daca\"}");
+		JSONObject js = new JSONObject();
+		js.put("email", "daca");
+		js.put("password", "daca");
 		response = given().body(js.toString())
 		.contentType("application/json; charset=UTF-8")		
 		.when().post(LOGIN)

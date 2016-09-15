@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import bootwildfly.Application;
 
@@ -33,7 +35,7 @@ import bootwildfly.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public class ProblemControllerIT {
+public class ProblemControllerTest {
 
 	private final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYWNhIiwicm9sZXMiOltudWxsXSwiaWF0IjoxNDczMjA5NzE3LCJleHAiOjI5NDY0MTk0MzV9.4bA5G4pqTuk96S5-o2cvKKsVVN7-v2G0PLCqELlAxoY";
 
@@ -73,7 +75,7 @@ public class ProblemControllerIT {
 		.when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("name", equalTo("Problem name"));
+		.body("name", equalTo("problem name"));
 	}
 	
 	@Test
