@@ -80,7 +80,7 @@ public class ProblemController {
 	@ApiOperation(value = "Submit a solution to a problem by Id")
 	public List<ProblemTest> submitSolution(@PathVariable("id") Long id, @RequestBody Solution solution){
 		Problem problem = repProblem.findOne(id);
-		List<ProblemTest> failedTests = solutionService.testSolution(solution);
+		List<ProblemTest> failedTests = solutionService.testSolution(solution, problem);
 		if (failedTests.size() == 0) {
 			solutionService.pushSolution(problem, solution);
 		}

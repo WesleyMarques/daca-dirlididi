@@ -1,7 +1,11 @@
 package controllers;
 
+import bootwildfly.models.Problem;
 import bootwildfly.models.repositories.ProblemRepository;
 import bootwildfly.models.repositories.UserRepository;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +51,12 @@ public class ProblemControllerTest {
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
+		problemRepository.deleteAll();
+		Problem p = new Problem();
+		p.setName("Problem name");
+		p.setDescription("Description");
+
+		problemRepository.save(p);
 	}
 	
 	@Test
@@ -59,8 +69,9 @@ public class ProblemControllerTest {
 
 	@Test
 	public void getProblemByIdTest(){
+		Long id_problem = problemRepository.findAll().get(0).getId();
 		given().header("Authorization", TOKEN)
-        .pathParam("id", "1")
+        .pathParam("id", id_problem)
 		.when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
@@ -68,36 +79,39 @@ public class ProblemControllerTest {
 	}
 	
 	@Test
-	public void putProblemTest() throws JSONException{		
-		JSONObject updateProblem = new JSONObject();
-		updateProblem.put("name", "problem 190");
-		updateProblem.put("description", "nova descricao");
-		updateProblem.put("tip", "dica para o problema");
+	public void putProblemTest() throws JSONException {
+
+		JSONObject data = new JSONObject();
+		data.put("name", "problem 190");
+		data.put("description", "new description");
+		Long id_problem = problemRepository.findAll().get(0).getId();
 
 		given().header("Authorization", TOKEN)
 		.contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
-		.pathParam("id", "1")
-		.body(updateProblem.toString())
+		.pathParam("id", id_problem)
+		.body(data.toString())
 		.when()
 		.put(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
 		.body("message", equalTo("Problem updated successfully"));
 
-		Assert.assertTrue(problemRepository.findOne(1L).getName().equals("problem 190"));
+		Assert.assertTrue(problemRepository.findAll().get(0).getName().equals("problem 190"));
 	}
 	
 	@Test
 	public void deleteProblemTest(){
+		Long id_problem = problemRepository.findAll().get(0).getId();
+
 		given().header("Authorization", TOKEN)
-		.pathParam("id", "1")
+		.pathParam("id", id_problem)
 		.delete(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
 		.body("message", equalTo("Problem deleted successfully"));
 
 		given().header("Authorization", TOKEN)
-        .pathParam("id", "1")
+        .pathParam("id", id_problem)
 		.when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -106,15 +120,14 @@ public class ProblemControllerTest {
 	}
 	
 	@Test
-	public void postNewProblemTest() throws JSONException{
-		JSONObject newProblem = new JSONObject();
-		newProblem.put("name", "problem 1");
-		newProblem.put("description", "descricao ...");
-		newProblem.put("tip", "dica para o problema...");
+	public void postNewProblemTest() throws JSONException {
+		JSONObject data = new JSONObject();
+		data.put("name", "problem 1");
+		data.put("description", "description...");
 
 		given().header("Authorization", TOKEN)
 		.contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
-		.body(newProblem.toString())
+		.body(data.toString())
 		.when()
 		.post(PROBLEM).then()
 		.statusCode(HttpStatus.SC_OK)

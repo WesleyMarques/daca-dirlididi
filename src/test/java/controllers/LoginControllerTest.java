@@ -4,6 +4,9 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
+import bootwildfly.models.Role;
+import bootwildfly.models.User;
+import bootwildfly.models.repositories.UserRepository;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -35,9 +39,18 @@ public class LoginControllerTest {
 	@Value("${local.server.port}")
 	private int serverPort;
 
+	@Autowired
+	UserRepository userRepository;
+
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
+		userRepository.deleteAll();
+		User u = new User();
+		u.setEmail("daca");
+		u.setRole(Role.ADMIN);
+		u.setPassword("daca");
+		userRepository.save(u);
 	}
 	
 	@Test
