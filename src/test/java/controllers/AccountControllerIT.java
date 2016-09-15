@@ -1,13 +1,15 @@
 package controllers;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.equalTo;
-
+import bootwildfly.Application;
+import bootwildfly.models.Role;
+import bootwildfly.models.User;
+import bootwildfly.models.repositories.UserRepository;
+import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,19 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.google.common.net.MediaType;
-import com.jayway.restassured.RestAssured;
-
-import bootwildfly.Application;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -41,17 +35,12 @@ public class AccountControllerIT {
 	private int serverPort;
 
 	@Autowired
-	private WebApplicationContext context;
-
-	private MockMvc mvc;
+	UserRepository userRepository;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
-		mvc = MockMvcBuilders
-				.webAppContextSetup(context)
-				.apply(SecurityMockMvcConfigurers.springSecurity())
-				.build();
+		userRepository.deleteAll();
 	}
 	
 	@Test
@@ -66,10 +55,17 @@ public class AccountControllerIT {
         when().post(ACCOUNT).
         then().statusCode(HttpStatus.SC_OK)
         .body("message", equalTo("Account created successfully"));
+
+		Assert.assertTrue(userRepository.count() == 1);
 	}
 	
 	@Test
 	public void getAccountTest() throws JSONException {
+		User u = new User();
+		u.setEmail("daca");
+		u.setRole(Role.ADMIN);
+		u.setPassword("daca");
+		userRepository.save(u);
 
 		Response response = given().header("Authorization", TOKEN).
 		when()
@@ -77,7 +73,7 @@ public class AccountControllerIT {
 		.statusCode(HttpStatus.SC_OK)
 				.body("email", equalTo("daca"))
 				.extract().response();
-		System.out.print(response.getBody().print());
+		//System.out.print(response.getBody().print());
 	}
 	
 	

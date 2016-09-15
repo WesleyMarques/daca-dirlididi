@@ -13,7 +13,8 @@ public class Output {
     @Column(nullable = false)
     private String value;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name="test_id", nullable = false)
     private ProblemTest test;
 
     public Output() { }

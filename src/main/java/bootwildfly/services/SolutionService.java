@@ -21,7 +21,7 @@ public class SolutionService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public List<ProblemTest> testSolution(Solution solution) {
+	public List<ProblemTest> testSolution(Solution solution, Problem problem) {
 		List<ProblemTest> fails = new ArrayList<>();
 		for (Output o : solution.getOutputs()) {
 			if (!o.getTest().getOutput().equals(o.getValue())) {
