@@ -3,7 +3,7 @@
 angular.module('MyApp', ['ngRoute', 'datatables'])
     .config(['$routeProvider', '$locationProvider', '$interpolateProvider', configApp]);
 
-function configApp($routeProvider, $locationProvider) {
+function configApp($routeProvider, $locationProvider, $httpProvider) {
 
     $routeProvider
         .when('/', {
@@ -17,29 +17,30 @@ function configApp($routeProvider, $locationProvider) {
             controllerAs: 'lc'
         })
         .when('/problems', {
-          templateUrl: '/templates/list_problem.html',
-          controller: 'ProblemCtrl',
-          controllerAs: 'pc'
+            templateUrl: '/templates/list_problem.html',
+            controller: 'ProblemCtrl',
+            controllerAs: 'pc'
         })
         .when('/problem/create', {
-          templateUrl: '/templates/create_problem.html',
-          controller: 'ProblemCtrl',
-          controllerAs: 'pc'
+            templateUrl: '/templates/create_problem.html',
+            controller: 'ProblemCtrl',
+            controllerAs: 'pc'
         })
         .when('/problem/:id/edit', {
-          templateUrl: '/templates/edit_problem.html',
-          controller: 'ProblemCtrl',
-          controllerAs: 'pc'
+            templateUrl: '/templates/edit_problem.html',
+            controller: 'ProblemCtrl',
+            controllerAs: 'pc'
         })
         .when('/ide', {
-          templateUrl: '/templates/ide.html',
-          controller: 'ProblemCtrl',
-          controllerAs: 'pc'
+            templateUrl: '/templates/ide.html',
+            controller: 'ProblemCtrl',
+            controllerAs: 'pc'
         })
         .otherwise({
             redirectTo: '/login'
         });
 
+    $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false

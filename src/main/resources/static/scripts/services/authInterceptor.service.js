@@ -20,6 +20,6 @@ angular.module('MyApp').factory('authInterceptor', function($rootScope, $q) {
   };
 });
 
-angular.module('MyApp').config(function($httpProvider) {
-  $httpProvider.interceptors.push('authInterceptor');
-});
+/*angular.module('MyApp').config(function($httpProvider) {
+    $httpProvider.interceptors.push('authInterceptor');
+});*/

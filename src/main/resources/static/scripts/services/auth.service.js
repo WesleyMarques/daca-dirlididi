@@ -11,9 +11,14 @@ function authService($http) {
   Service.login = login;
   Service.isAuthenticated = isAuthenticated;
 
+  
+
   return Service;
 
   function login(data, scope) {
+    var headers = credentials ? {authorization : "Basic "
+        + btoa(data.email + ":" + data.password)
+    } : {};
     return $http.post('/login', data)
       .success(function(data) {
         console.log(data);
