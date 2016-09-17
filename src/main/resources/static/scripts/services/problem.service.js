@@ -2,9 +2,9 @@ angular
   .module('MyApp')
   .service('Problem', problemService);
 
-problemService.$inject = ['$http'];
+problemService.$inject = ['$http', '$location'];
 
-function problemService($http) {
+function problemService($http, $location) {
 
   var Service = {};
   Service.data = [];
@@ -12,6 +12,7 @@ function problemService($http) {
   Service.get = get;
   Service.update = update;
   Service.create = create;
+  Service.delete = remove;
   Service.refresh = refresh;
 
   return Service;
@@ -39,9 +40,11 @@ function problemService($http) {
   }
 
   function update(data) {
-    $http.put('/api/problem/' + id, data)
+    $http.put('/api/problem/' + data.id, data)
       .success(function(data) {
         console.log(data);
+        alert(data.message);
+        $location.path('/problems');
       })
       .error(function(data) {
         console.log('Error: ' + data);
@@ -52,6 +55,20 @@ function problemService($http) {
     $http.post('/api/problem/', data)
       .success(function(data) {
         console.log(data);
+        alert(data.message);
+        $location.path('/problems');
+      })
+      .error(function(data) {
+        console.log('Error: ' + data);
+      });
+  }
+
+  function remove(id) {
+    $http.delete('/api/problem/' + id)
+      .success(function(data) {
+        console.log(data);
+        alert(data.message);
+        Service.refresh();
       })
       .error(function(data) {
         console.log('Error: ' + data);

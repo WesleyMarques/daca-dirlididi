@@ -1,23 +1,53 @@
 <div class="container">
-  <form role="form" ng-submit="cadastrar()">
-    <div class="col-sm-6 col-offset-3 form-group">
+  <form role="form" ng-submit="pc.create()">
+    <div class="col-sm-6 col-sm-offset-3 form-group">
       <label>Name*</label>
-      <input class="form-control" value="" ng-model="cadastrardata.name" placeholder="Name" required>
+      <input class="form-control" value="" ng-model="pc.cadastrardata.name" placeholder="Name" required>
     </div>
 
-    <div class="col-sm-6 col-offset-3 form-group">
+    <div class="col-sm-6 col-sm-offset-3 form-group">
       <label>Description*</label>
-      <input class="form-control" value="" ng-model="cadastrardata.description" placeholder="Description" required>
+      <input class="form-control" value="" ng-model="pc.cadastrardata.description" placeholder="Description" required>
     </div>
 
-    <div class="col-sm-6 col-offset-3 form-group">
+    <div class="col-sm-6 col-sm-offset-3 form-group">
       <label>Tip</label>
-      <input class="form-control" value="" ng-model="cadastrardata.tip" placeholder="Tip">
+      <input class="form-control" value="" ng-model="pc.cadastrardata.tip" placeholder="Tip">
     </div>
 
-    <div class="col-sm-6 col-offset-3 form-group">
-      <label>Name</label>
-      <input class="form-control" value="" ng-model="cadastrardata.name" placeholder="Name">
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <label>Publish</label>
+      <input class="form-control" type="checkbox" value="false" ng-model="pc.cadastrardata.published">
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3 form-group" style="border: 1px solid #ccc;">
+      <label>Tests</label>
+      <div class="col-sm-12 form-group" ng-repeat="test in pc.cadastrardata.tests" style="border: 1px solid #222;">
+        <div>
+          <label>Test Name</label>
+          <input class="form-control" ng-model="test.name" placeholder="Test Name">
+        </div>
+        <div>
+          <label>Test Tip</label>
+          <input class="form-control" ng-model="test.tip" placeholder="Test Tip">
+        </div>
+        <div>
+          <label>Test Input</label>
+          <input class="form-control" ng-model="test.input" placeholder="Test Input">
+        </div>
+        <div>
+          <label>Test Output</label>
+          <input class="form-control" ng-model="test.output" placeholder="Test Output">
+        </div>
+        <div>
+          <label>Visibility</label>
+          <input class="form-control" ng-model="test.visible" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <button type="button" class="btn btn-primary" ng-click="pc.addTest(pc.cadastrardata)">Add Test</button>
+      <button type="submit" class="btn btn-success">Create Problem</button>
     </div>
   </form>
 </div>
