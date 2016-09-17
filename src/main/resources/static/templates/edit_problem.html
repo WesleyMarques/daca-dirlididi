@@ -1,13 +1,53 @@
 <div class="container">
-  <form role="form" ng-submit="editar()">
-    <div class="col-sm-6 col-offset-3 form-group">
-      <label>Nome do Cliente</label>
-      <input class="form-control" value="" ng-model="cadastrardata.nome_cliente"
-             placeholder="Nome do cliente" required>
+  <form role="form" ng-submit="pc.edit()">
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <label>Name*</label>
+      <input class="form-control" value="" ng-model="pc.problemsSvc.selected.name" placeholder="Name" required>
     </div>
-    <div style="text-align: center; margin-top: 8em">
-      <button type="submit" class="btn btn-success">Update</button>
-      <button type="reset" class="btn btn-default">Limpar</button>
+
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <label>Description*</label>
+      <input class="form-control" value="" ng-model="pc.problemsSvc.selected.description" placeholder="Description" required>
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <label>Tip</label>
+      <input class="form-control" value="" ng-model="pc.problemsSvc.selected.tip" placeholder="Tip">
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <label>Publish</label>
+      <input class="form-control" type="checkbox" value="false" ng-model="pc.problemsSvc.selected.published">
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-3 form-group" style="border: 1px solid #ccc;">
+      <label>Tests</label>
+      <div class="col-sm-12 form-group" ng-repeat="test in pc.problemsSvc.selected.tests" style="border: 1px solid #222;">
+        <div>
+          <label>Test Name</label>
+          <input class="form-control" ng-model="test.name" placeholder="Test Name">
+        </div>
+        <div>
+          <label>Test Tip</label>
+          <input class="form-control" ng-model="test.tip" placeholder="Test Tip">
+        </div>
+        <div>
+          <label>Test Input</label>
+          <input class="form-control" ng-model="test.input" placeholder="Test Input">
+        </div>
+        <div>
+          <label>Test Output</label>
+          <input class="form-control" ng-model="test.output" placeholder="Test Output">
+        </div>
+        <div>
+          <label>Visibility</label>
+          <input class="form-control" ng-model="test.visible" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <button type="button" class="btn btn-primary" ng-click="pc.addTest(pc.problemsSvc.selected)">Add Test</button>
+      <button type="submit" class="btn btn-success">Update Problem</button>
     </div>
   </form>
 </div>

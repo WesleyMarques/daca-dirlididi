@@ -29,4 +29,9 @@ public class AngularController {
 		return "../static/index";
 	}
 
+	@RequestMapping(path = "/problem/{id}/edit", method = RequestMethod.GET)
+	public String editProblem() {
+		return "../static/index";
+	}
+
 }
