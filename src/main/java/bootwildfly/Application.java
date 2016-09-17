@@ -2,6 +2,12 @@ package bootwildfly;
 
 import bootwildfly.controllers.ProblemController;
 import com.google.common.base.Predicates;
+
+import java.util.Collections;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +22,8 @@ import org.springframework.cglib.core.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import bootwildfly.models.Problem;
@@ -60,6 +68,12 @@ public class Application extends SpringBootServletInitializer {
 //		return registrationBean;
 //	}
 
+	@RequestMapping("/token")
+	@ResponseBody
+	public Map<String, String> token(HttpSession session) {
+		return Collections.singletonMap("token", session.getId());
+	}
+	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

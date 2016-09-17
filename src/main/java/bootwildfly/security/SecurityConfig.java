@@ -37,11 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
         .httpBasic()
         .and()
-        .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .and()
         .authorizeRequests()
-        .antMatchers("/", "/login", "/resources/static/**").permitAll()
-        .anyRequest().authenticated();
+        .antMatchers("/*","/logout", "/resources/static/**").permitAll()
+        .antMatchers("/api/**").authenticated()
+        .and()
+        .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

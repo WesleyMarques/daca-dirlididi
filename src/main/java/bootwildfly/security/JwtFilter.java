@@ -25,7 +25,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 
-@Component
+//@Component
 public class JwtFilter extends GenericFilterBean {
 
     private String TOKEN_SESSION_KEY;
