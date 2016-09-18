@@ -13,7 +13,7 @@ function statisticsService($http) {
   return Service;
 
   function refresh() {
-    $http.get('/api/empresa')
+    $http.get('/api/statistics')
       .success(function(data) {
         console.log(data);
         Service.data = data;

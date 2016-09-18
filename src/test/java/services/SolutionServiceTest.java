@@ -108,4 +108,28 @@ public class SolutionServiceTest {
         System.out.println(result.size());
         Assert.assertTrue( result.size() == 1);
     }
+
+    @Test
+    public void publishSolutionTest() {
+        Solution s = new Solution();
+        s.setBody("Body Solution");
+        s.setUser(userRepository.findAll().get(0));
+
+        List<Output> outputs = new ArrayList<>();
+        Output o = new Output();
+        o.setValue("Saida 1");
+        o.setTest(problemTestRepository.findAll().get(0));
+        outputs.add(o);
+
+        s.setOutputs(outputs);
+
+        solutionService.pushSolution(problemRepository.findAll().get(0), s);
+
+        Assert.assertTrue( userRepository.findAll().get(0).getResolvidos().size() == 1);
+        Assert.assertTrue( userRepository.findAll().get(0).getResolvidos().get(0).getName().equals("Name 1"));
+        Assert.assertTrue( solutionRepository.count() == 1);
+
+    }
+
+
 }

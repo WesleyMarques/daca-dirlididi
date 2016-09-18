@@ -2,22 +2,15 @@
     angular.module('MyApp')
         .controller('MainCtrl', MainCtrl);
 
-    MainCtrl.$inject = ['Auth'];
+    MainCtrl.$inject = ['Auth', 'Statistics', 'Account'];
 
-    function MainCtrl(Auth) {
-        var bc = this;
+    function MainCtrl(Auth, Statistics, Account) {
+        var mc = this;
 
-        //bc.liSvc = Livro;
-
-        bc.addLivro = function(livro) {
-            //var li = angular.copy(livro);
-            //li.comentarios = [];
-            //Livro.create(li);
-        }
-
-        bc.isAuth = function(){
-            return Auth.isAuthenticated()
-        }
-
+        Statistics.refresh();
+        Account.refresh();
+        
+        mc.statisticsService = Statistics;
+        mc.accountService= Account;
     }
 })()

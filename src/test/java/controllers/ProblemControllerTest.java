@@ -1,10 +1,12 @@
 package controllers;
 
 import bootwildfly.models.Problem;
+import bootwildfly.models.ProblemTest;
+import bootwildfly.models.Role;
+import bootwildfly.models.User;
 import bootwildfly.models.repositories.ProblemRepository;
 import bootwildfly.models.repositories.UserRepository;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,6 +43,7 @@ public class ProblemControllerTest {
 
 	private static final String PROBLEM = "/api/problem";
 	private static final String PROBLEM_ID = "/api/problem/{id}";
+	private static final String PROBLEM_SOLUTION = "/api/problem/{id}/solution";
 
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -48,10 +51,21 @@ public class ProblemControllerTest {
 	@Autowired
 	ProblemRepository problemRepository;
 
+	@Autowired
+	UserRepository userRepository;
+
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
 		problemRepository.deleteAll();
+		userRepository.deleteAll();
+
+		User u = new User();
+		u.setEmail("teste@gmail.com");
+		u.setPassword("1234");
+		u.setRole(Role.USER);
+		userRepository.save(u);
+
 		Problem p = new Problem();
 		p.setName("Problem name");
 		p.setDescription("Description");
@@ -135,5 +149,42 @@ public class ProblemControllerTest {
 
 	}
 
+	@Test
+	public void postSolutionTest() throws JSONException {
+
+		ProblemTest test = new ProblemTest();
+		test.setName("Test 1");
+		test.setInput("14");
+		test.setOutput("15");
+		Problem p = problemRepository.findAll().get(0);
+		p.getTests().add(test);
+		problemRepository.save(p);
+
+		JSONArray array = new JSONArray();
+		JSONObject output = new JSONObject();
+
+		JSONObject teste = new JSONObject();
+		teste.put("input", "14");
+		teste.put("output", "15");
+
+		output.put("value", "15");
+		output.put("test", teste);
+
+		array.put(output);
+
+		JSONObject data = new JSONObject();
+		data.put("body", "solution description");
+		data.put("outputs", array);
+
+		given().header("Authorization", TOKEN)
+				.contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.body(data.toString())
+				.when()
+				.pathParam("id", problemRepository.findAll().get(0).getId())
+				.post(PROBLEM_SOLUTION).then()
+				.statusCode(HttpStatus.SC_OK)
+				.body("size()", equalTo(0));
+
+	}
 }
 

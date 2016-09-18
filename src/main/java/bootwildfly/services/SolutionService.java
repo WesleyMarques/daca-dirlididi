@@ -35,6 +35,7 @@ public class SolutionService {
 	public void pushSolution(Problem problem, Solution solution) {
 		User u = userRepository.findAll().get(0);
 		solution.setProblem(problem);
+		solution.setUser(u);
 		u.getResolvidos().add(problem);
 		u.getSolutions().add(solution);
 		userRepository.save(u);

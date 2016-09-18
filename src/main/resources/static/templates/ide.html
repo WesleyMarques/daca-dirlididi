@@ -1,0 +1,42 @@
+<div class="container">
+
+
+  <form role="form" ng-submit="ic.submit()">
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <ul>
+        <div class="alert alert-danger" ng-repeat="fail in ic.tests_failed">
+          Failed on test {{$index + 1}} to input {{fail.input}}
+        </div>
+      </ul>
+    </div>
+    <div class="col-sm-6 col-sm-offset-3 form-group">
+      <label>Problem*</label>
+      <select class="form-control" ng-model="ic.problemToSolve"
+        ng-change="ic.setOutputs(ic.problemToSolve)">
+        <option ng-repeat="option in ic.problemService.data" ng-value="{{$index}}">{{option.name}}</option>
+      </select>
+    </div>
+
+    <div ng-show="ic.problemToSolve">
+      <div class="col-sm-6 col-sm-offset-3 form-group">
+        <label>Solution Description*</label>
+        <input class="form-control" ng-model="ic.solutiondata.body" placeholder="Description" required>
+      </div>
+      <div class="col-sm-6 col-sm-offset-3 form-group" ng-repeat="output in ic.outputs">
+        <div>
+          <label>Input</label>
+          <input class="form-control" ng-model="output.test.input" disabled="">
+        </div>
+        <div>
+          <label>Output</label>
+          <input class="form-control" ng-model="output.value">
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-sm-offset-3 form-group">
+        <button type="submit" class="btn btn-success">Submit Solution</button>
+      </div>
+    </div>
+
+  </form>
+</div>

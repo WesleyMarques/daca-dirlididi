@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('MyApp', ['ngRoute'])
+angular.module('MyApp', ['ngRoute', 'datatables'])
     .config(['$routeProvider', '$locationProvider', '$interpolateProvider', configApp]);
 
 function configApp($routeProvider, $locationProvider, $httpProvider) {
@@ -33,14 +33,14 @@ function configApp($routeProvider, $locationProvider, $httpProvider) {
         })
         .when('/ide', {
             templateUrl: '/templates/ide.html',
-            controller: 'ProblemCtrl',
-            controllerAs: 'pc'
+            controller: 'IdeCtrl',
+            controllerAs: 'ic'
         })
         .otherwise({
             redirectTo: '/login'
         });
 
-    $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+    //$httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false

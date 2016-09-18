@@ -1,7 +1,14 @@
 <div class="container">
   <h1>Welcome to Daca Dirlididi</h1>
-  <h4>Total Problems: </h4>
-  <h4>Total Users: </h4>
-  <h4>Total Problems You Solved: </h4>
-  asd
+
+  <div class="page-header">
+    <h3>Global Stats</h3>
+  </div>
+  <h4>Total Problems: {{mc.statisticsService.data.total_problems}}</h4>
+  <h4>Total Users: {{mc.statisticsService.data.total_users}}</h4>
+
+  <div class="page-header">
+    <h3>Your Stats</h3>
+  </div>
+  <h4>Total Problems You Solved: {{mc.statisticsService.data.problems_you_solved}}</h4>
 </div>

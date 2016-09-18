@@ -13,6 +13,7 @@ function problemService($http, $location) {
   Service.update = update;
   Service.create = create;
   Service.delete = remove;
+  Service.submit = submit;
   Service.refresh = refresh;
 
   return Service;
@@ -69,6 +70,22 @@ function problemService($http, $location) {
         console.log(data);
         alert(data.message);
         Service.refresh();
+      })
+      .error(function(data) {
+        console.log('Error: ' + data);
+      });
+  }
+
+  function submit(id, data, callback) {
+    $http.post('/api/problem/' + id + "/solution", data)
+      .success(function(data) {
+        console.log(data);
+        if (data.length == 0) {
+          alert("Solution Accepted! You Solve this problem");
+          window.location.href = "/ide";
+        } else {
+          callback(data);
+        }
       })
       .error(function(data) {
         console.log('Error: ' + data);

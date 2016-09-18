@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="MyApp">
 <head>
   <meta charset="utf-8"/>
   <title>Daca Dirlididi</title>
@@ -8,19 +8,18 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
 
-<!--  <script src="/scripts/jquery-1.11.1.min.js"></script>
+  <script src="/scripts/jquery-1.11.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="/scripts/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
   <script src="/scripts/angular-route.min.js"></script>
   <script src="/scripts/jquery.dataTables.min.js"></script>
   <script src="/scripts/angular-datatables.min.js"></script>-->
-  <script src="/scripts/angular.min.js"></script>
-  <script src="/scripts/angular-route.min.js"></script>
   <script src="/scripts/config.js"></script>
 
   <script src="/scripts/controllers/login.controller.js"></script>
   <script src="/scripts/controllers/main.controller.js"></script>
   <script src="/scripts/controllers/problem.controller.js"></script>
+  <script src="/scripts/controllers/ide.controller.js"></script>
 
   <script src="/scripts/services/account.service.js"></script>
   <script src="/scripts/services/auth.service.js"></script>
@@ -28,7 +27,7 @@
   <script src="/scripts/services/statistics.service.js"></script>
   <script src="/scripts/services/authInterceptor.service.js"></script>
 </head>
-<body ng-app="MyApp">
+<body ng-controller="MainCtrl as mc">
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -39,6 +38,11 @@
           <li><a href="/ide">Ide</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+          <li ng-if="!bc.isAuth()">
+            <a href="#" style="color: seagreen;cursor: default;">
+              Logged as {{mc.accountService.account.email}}
+            </a>
+          </li>
           <li ng-if="!bc.isAuth()"><a href="/login">Login</a></li>
           <li ng-if="bc.isAuth()"><a href="">Logout</a></li>
         </ul>
