@@ -4,7 +4,11 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 
+import bootwildfly.services.AuthService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,29 +30,36 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 
 	@Autowired
-	UserRepository userRepository;
+	AuthService authService;
 
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "email", value = "User's email", required = true, dataType = "string", paramType = "body") })
-	@RequestMapping(method = RequestMethod.POST, path = "/auth", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "application/json")
+	@RequestMapping(method = RequestMethod.POST, path = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "application/json")
 	@ApiOperation(value = "Login in the system", notes = "Realizes the login in the sytem")
-	public String login(@RequestBody final User user) throws ServletException {
-//		User result = userRepository.findOneByEmail(user.getEmail());
-//		if (result == null || !result.getPassword().equals(user.getPassword())) {
-//			throw new ServletException("Invalid login or password");
-//		} else {
-//			return ("{\"token\": \""
-//					+ Jwts.builder().setSubject(user.getEmail()).claim("roles", Arrays.asList(user.getRole()))
-//							.setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() * 2))
-//							.signWith(SignatureAlgorithm.HS256, "secretkey").compact()
-//					+ "\"}");
-//		}
-		return "";
+	public String login(@RequestBody final User user, HttpSession session) throws ServletException, JSONException {
+		if (authService.isAuth(session)) {
+			User result = authService.getUserAuthenticated(session);
+			if (result == null || !result.getPassword().equals(user.getPassword())) {
+				throw new ServletException("Invalid login or password");
+			} else {
+				session.setAttribute("username", user.getEmail());
+				return ("{\"token\": \""
+						+ Jwts.builder().setSubject(user.getEmail()).claim("roles", Arrays.asList(user.getRole()))
+						.setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() * 2))
+						.signWith(SignatureAlgorithm.HS256, "secretkey").compact()
+						+ "\"}");
+			}
+		} else {
+			JSONObject jsonRes = new JSONObject();
+			jsonRes.put("message", "user already authenticated");
+			return jsonRes.toString();
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.POST, path = "/logout", produces = "application/json")
 	@ApiOperation(value = "Logout of the system", notes = "Realizes the logout of the sytem")
-	public String logout() {
+	public String logout(HttpSession session) {
+		session.removeAttribute("username");
 		return ("{message : 'Logout successful'}");
 	}
 }

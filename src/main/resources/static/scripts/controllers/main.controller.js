@@ -12,5 +12,13 @@
         
         mc.statisticsService = Statistics;
         mc.accountService= Account;
+
+        mc.isAuth = function () {
+            return Account.isAuth();
+        }
+
+        mc.logout = function () {
+            Auth.logout();
+        }
     }
 })()

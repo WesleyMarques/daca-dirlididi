@@ -57,16 +57,16 @@ public class Application extends SpringBootServletInitializer {
 				.paths(Predicates.not(PathSelectors.regex("angular")))
 				.build();
 	}
-//
-//	@Bean
-//	public FilterRegistrationBean jwtFilter() {
-//
-//		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-//		registrationBean.setFilter(new JwtFilter());
-//		registrationBean.addUrlPatterns("/api/*");
-//
-//		return registrationBean;
-//	}
+
+	@Bean
+	public FilterRegistrationBean jwtFilter() {
+
+		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+		registrationBean.setFilter(new JwtFilter());
+		registrationBean.addUrlPatterns("/api/*");
+
+		return registrationBean;
+	}
 
 	@RequestMapping("/token")
 	@ResponseBody

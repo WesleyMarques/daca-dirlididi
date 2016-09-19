@@ -2,13 +2,14 @@ angular
   .module('MyApp')
   .service('Account', accountService);
 
-accountService.$inject = ['$http'];
+accountService.$inject = ['$http', '$location'];
 
-function accountService($http) {
+function accountService($http, $location) {
 
     var Service = {};
-    Service.account = [];
+    Service.account = null;
     Service.refresh = refresh;
+    Service.isAuth = isAuth;
 
     return Service;
 
@@ -19,7 +20,13 @@ function accountService($http) {
               Service.account = data;
           })
           .error(function(data) {
+              Service.account = null;
+              $location.path('/login');
               console.log('Error: ' + data);
           });
+    }
+
+    function isAuth() {
+        return Service.account != null;
     }
 }
