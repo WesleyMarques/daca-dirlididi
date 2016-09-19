@@ -2,6 +2,7 @@ package bootwildfly.controllers;
 
 import bootwildfly.models.User;
 import bootwildfly.models.repositories.UserRepository;
+import bootwildfly.services.AuthService;
 import bootwildfly.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,14 +29,16 @@ public class AccountController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	AuthService authService;
+
 	@RequestMapping(method = RequestMethod.GET, path="/api/account", produces = "application/json")
 	@ApiOperation(value = "Returns the account info of session user", notes = "Returns the account info of session user")
     public User get(HttpSession session) throws ServletException {
-		String username = (String) session.getAttribute("username");
-		if (username == null) {
+		if (!authService.isAuth(session)) {
 			throw new ServletException("Nobody is logged!");
 		}
-		return repository.findOneByEmail(username);
+		return authService.getUserAuthenticated(session);
     }
 
 	@RequestMapping(method = RequestMethod.POST, path="/api/account", produces = "application/json")

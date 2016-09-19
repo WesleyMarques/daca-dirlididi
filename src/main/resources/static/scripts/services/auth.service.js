@@ -36,6 +36,7 @@ function authService($http, $location, Account) {
             .success(function(data) {
                 console.log(data);
                 Service.token = "";
+                Account.account = null;
                 $location.path("/login");
             })
             .error(function(data) {

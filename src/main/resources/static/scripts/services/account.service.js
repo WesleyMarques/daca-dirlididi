@@ -20,6 +20,7 @@ function accountService($http, $location) {
               Service.account = data;
           })
           .error(function(data) {
+              console.log(data);
               Service.account = null;
               $location.path('/login');
               console.log('Error: ' + data);

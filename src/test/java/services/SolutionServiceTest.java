@@ -123,7 +123,7 @@ public class SolutionServiceTest {
 
         s.setOutputs(outputs);
 
-        solutionService.pushSolution(problemRepository.findAll().get(0), s);
+        solutionService.pushSolution(problemRepository.findAll().get(0), s, userRepository.findAll().get(0));
 
         Assert.assertTrue( userRepository.findAll().get(0).getResolvidos().size() == 1);
         Assert.assertTrue( userRepository.findAll().get(0).getResolvidos().get(0).getName().equals("Name 1"));

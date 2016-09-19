@@ -3,7 +3,9 @@ package bootwildfly.controllers;
 import bootwildfly.models.Problem;
 import bootwildfly.models.ProblemTest;
 import bootwildfly.models.Solution;
+import bootwildfly.models.User;
 import bootwildfly.models.repositories.ProblemRepository;
+import bootwildfly.services.AuthService;
 import bootwildfly.services.SolutionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Api(value="problem", description="Operations about problem")
@@ -28,6 +31,9 @@ public class ProblemController {
 
 	@Autowired
 	SolutionService solutionService;
+
+	@Autowired
+	AuthService authService;
 
 	@RequestMapping(method = RequestMethod.GET, path="/api/problem", produces = "application/json")
 	@ApiOperation(value = "Returns all the problems of system", notes = "Return the array of objects relative to all the problems of the system")
@@ -78,11 +84,12 @@ public class ProblemController {
 
 	@RequestMapping(method = RequestMethod.POST, path="/api/problem/{id}/solution", produces = "application/json")
 	@ApiOperation(value = "Submit a solution to a problem by Id")
-	public List<ProblemTest> submitSolution(@PathVariable("id") Long id, @RequestBody Solution solution){
+	public List<ProblemTest> submitSolution(@PathVariable("id") Long id, @RequestBody Solution solution, HttpSession session){
 		Problem problem = repProblem.findOne(id);
 		List<ProblemTest> failedTests = solutionService.testSolution(solution, problem);
+		User user = authService.getUserAuthenticated(session);
 		if (failedTests.size() == 0) {
-			solutionService.pushSolution(problem, solution);
+			solutionService.pushSolution(problem, solution, user);
 		}
 		return failedTests;
 	}

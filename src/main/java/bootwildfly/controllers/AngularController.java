@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class AngularController {
 
-
 	@Autowired
 	AuthService authService;
 

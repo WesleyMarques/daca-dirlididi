@@ -38,7 +38,7 @@
           <li><a href="/ide">Ide</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-if="!bc.isAuth()">
+          <li ng-if="mc.isAuth()">
             <a href="#" style="color: seagreen;cursor: default;">
               Logged as {{mc.accountService.account.email}}
             </a>

@@ -32,13 +32,16 @@ public class LoginController {
 	@Autowired
 	AuthService authService;
 
+	@Autowired
+	UserRepository userRepository;
+
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "email", value = "User's email", required = true, dataType = "string", paramType = "body") })
 	@RequestMapping(method = RequestMethod.POST, path = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "application/json")
 	@ApiOperation(value = "Login in the system", notes = "Realizes the login in the sytem")
 	public String login(@RequestBody final User user, HttpSession session) throws ServletException, JSONException {
-		if (authService.isAuth(session)) {
-			User result = authService.getUserAuthenticated(session);
+		if (!authService.isAuth(session)) {
+			User result = userRepository.findOneByEmail(user.getEmail());
 			if (result == null || !result.getPassword().equals(user.getPassword())) {
 				throw new ServletException("Invalid login or password");
 			} else {
