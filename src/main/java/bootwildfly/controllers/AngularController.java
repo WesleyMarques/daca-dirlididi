@@ -34,4 +34,10 @@ public class AngularController {
 		return "../static/index";
 	}
 
+	@RequestMapping(path = "/callback", method = RequestMethod.GET)
+	public String facebookCallback() {
+		System.out.println("ASDAISDIAISDA=============");
+		return "../static/index";
+	}
+
 }
