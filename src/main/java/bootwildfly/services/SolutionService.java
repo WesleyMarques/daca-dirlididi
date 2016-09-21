@@ -32,12 +32,11 @@ public class SolutionService {
 	}
 
 	@Transactional
-	public void pushSolution(Problem problem, Solution solution) {
-		User u = userRepository.findAll().get(0);
+	public void pushSolution(Problem problem, Solution solution, User user) {
 		solution.setProblem(problem);
-		solution.setUser(u);
-		u.getResolvidos().add(problem);
-		u.getSolutions().add(solution);
-		userRepository.save(u);
+		solution.setUser(user);
+		user.getResolvidos().add(problem);
+		user.getSolutions().add(solution);
+		userRepository.save(user);
 	}
 }

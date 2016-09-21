@@ -2,11 +2,13 @@
     angular.module('MyApp')
         .controller('ProblemCtrl', ProblemCtrl);
 
-    ProblemCtrl.$inject = ['Problem', '$routeParams'];
+    ProblemCtrl.$inject = ['Problem', 'Account', '$routeParams'];
 
-    function ProblemCtrl(Problem, $routeParams) {
+    function ProblemCtrl(Problem, Account, $routeParams) {
         var pc = this;
-        
+
+        Account.refresh();
+
         pc.cadastrardata = {
             tests : []
         }
@@ -27,6 +29,15 @@
                 output : "",
                 visible : false
             })
+        }
+
+        pc.isSolved = function (id) {
+            for (i in Account.account.resolvidos) {
+                if (Account.account.resolvidos[i].id == id) {
+                    return "yes";
+                }
+            }
+            return "no";
         }
 
         pc.removeTest = function (index) {

@@ -26,6 +26,7 @@ public class Problem {
     private List<ProblemTest> tests = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Solution> solutions= new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "resolvidos")

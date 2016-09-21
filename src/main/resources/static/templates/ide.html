@@ -13,7 +13,9 @@
       <label>Problem*</label>
       <select class="form-control" ng-model="ic.problemToSolve"
         ng-change="ic.setOutputs(ic.problemToSolve)">
-        <option ng-repeat="option in ic.problemService.data" ng-value="{{$index}}">{{option.name}}</option>
+        <option ng-repeat="option in ic.problemService.data" ng-value="{{$index}}" ng-show="ic.isNotSolved(option.id)">
+          {{option.name}}
+        </option>
       </select>
     </div>
 

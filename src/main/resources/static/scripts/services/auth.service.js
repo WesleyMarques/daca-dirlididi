@@ -2,33 +2,32 @@ angular
     .module('MyApp')
     .service('Auth', authService);
 
-authService.$inject = ['$http'];
+authService.$inject = ['$http', '$location', 'Account'];
 
-function authService($http) {
+function authService($http, $location, Account) {
 
     var Service = {};
     Service.token = "";
     Service.login = login;
     Service.isAuthenticated = isAuthenticated;
-
-
+    Service.logout = logout;
+    Account.refresh();
 
     return Service;
 
     function login(data, scope) {
-        var headers = credentials ? {
-            authorization: "Basic " + btoa(data.email + ":" + data.password)
-        } : {};
-        return $http.post('/auth', data, { headers: headers })
+        return $http.post('/login', data)
             .success(function(data) {
                 console.log(data);
-                window.localStorage.setItem('token', data.token);
+                if (data != "user already authenticated") {
+                    window.localStorage.setItem('token', data.token);
+                    Service.token = data;
+                }
                 window.location.href = "/";
-                Service.token = data;
             })
             .error(function(data) {
-                scope.error = data.message;
                 console.log(data);
+                scope.error = data.message;
             });
     }
 
@@ -37,6 +36,8 @@ function authService($http) {
             .success(function(data) {
                 console.log(data);
                 Service.token = "";
+                Account.account = null;
+                $location.path("/login");
             })
             .error(function(data) {
                 console.log(data);
@@ -44,6 +45,6 @@ function authService($http) {
     }
 
     function isAuthenticated() {
-        return !!window.localStorage.token;
+        return Account.account != null;
     }
 }

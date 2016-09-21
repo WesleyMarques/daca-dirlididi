@@ -35,20 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	// @formatter:off
         http
-        .httpBasic()
-        .and()
         .authorizeRequests()
-        .antMatchers("/*","/logout", "/resources/static/**").permitAll()
-        .antMatchers("/api/**").authenticated()
+        .antMatchers("/*", "/resources/static/**").permitAll()
         .and()
         .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
-        http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .invalidateHttpSession(true)
-                .logoutSuccessUrl("/login")
-                .deleteCookies("JSESSIONID")
-                .permitAll();
+//        http.logout()
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .invalidateHttpSession(true)
+//                .logoutSuccessUrl("/login")
+//                .deleteCookies("JSESSIONID")
+//                .permitAll();
      // @formatter:on
     }
 
@@ -56,32 +53,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/resources/static/**");
     }
-
-    @Autowired
-    public void REALconfigureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService());
-    }
-
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-
-            @Autowired
-            UserRepository userRepository;
-
-            @Override
-            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                bootwildfly.models.User result = userRepository.findOneByEmail(email);
-                if (result != null) {
-                    return new User(result.getEmail(), result.getPassword(), true, true, true, true,
-                            AuthorityUtils.createAuthorityList(result.getRole().toString()));
-                } else {
-                    throw new UsernameNotFoundException("could not find the user '" + email + "'");
-                }
-            }
-
-        };
-    }
-
 
 }

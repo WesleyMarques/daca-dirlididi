@@ -2,12 +2,13 @@
     angular.module('MyApp')
         .controller('IdeCtrl', IdeCtrl);
 
-    IdeCtrl.$inject = ['Problem'];
+    IdeCtrl.$inject = ['Problem', 'Account'];
 
-    function IdeCtrl(Problem) {
+    function IdeCtrl(Problem, Account) {
         var ic = this;
 
         Problem.refresh();
+        Account.refresh();
 
         ic.problemService = Problem;
         ic.solutiondata = {};
@@ -28,6 +29,15 @@
                 }
             }
             ic.outputs = outputs;
+        }
+
+        ic.isNotSolved = function (id) {
+            for (i in Account.account.resolvidos) {
+                if (Account.account.resolvidos[i].id == id) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         ic.submit = function () {

@@ -38,13 +38,12 @@
           <li><a href="/ide">Ide</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-if="!bc.isAuth()">
+          <li ng-if="mc.isAuth()">
             <a href="#" style="color: seagreen;cursor: default;">
               Logged as {{mc.accountService.account.email}}
             </a>
           </li>
-          <li ng-if="!bc.isAuth()"><a href="/login">Login</a></li>
-          <li ng-if="bc.isAuth()"><a href="">Logout</a></li>
+          <li ng-if="mc.isAuth()"><a href="#" ng-click="mc.logout()">Logout</a></li>
         </ul>
       </div>
     </div>
