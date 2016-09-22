@@ -89,7 +89,7 @@ public class ProblemControllerTest {
 		.when().get(PROBLEM_ID)
 		.then()
 		.statusCode(HttpStatus.SC_OK)
-		.body("name", equalTo("problem name"));
+		.body("name", equalTo("Problem name"));
 	}
 	
 	@Test
@@ -175,8 +175,21 @@ public class ProblemControllerTest {
 		JSONObject data = new JSONObject();
 		data.put("body", "solution description");
 		data.put("outputs", array);
+		
+		JSONObject js = new JSONObject();
+		try {
+			js.put("email", "teste@gmail.com");
+			js.put("password", "1234");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		Map<String,String> cookiesReq = given().body(js.toString())
+		.contentType("application/json; charset=UTF-8")		
+		.when().post("/login").getCookies();
+		System.err.println(problemRepository.findAll().get(0).getId());
 
-		given().header("Authorization", TOKEN)
+		given().header("Authorization", TOKEN).cookies(cookiesReq)
 				.contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.body(data.toString())
 				.when()

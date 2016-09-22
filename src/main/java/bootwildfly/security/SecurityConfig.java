@@ -1,24 +1,12 @@
 package bootwildfly.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import bootwildfly.models.repositories.UserRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -38,7 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/*", "/resources/static/**").permitAll()
         .and()
-        .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        .csrf().disable();
+//        .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
 //        http.logout()
 //                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
