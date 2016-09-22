@@ -17,7 +17,13 @@ function accountService($http, $location) {
         $http.get('/api/account')
           .success(function(data) {
               console.log(data);
-              Service.account = data;
+              if (data == "") {
+                console.log(data);
+                Service.account = null;
+                $location.path('/login');
+              } else {
+                Service.account = data;
+              }
           })
           .error(function(data) {
               console.log(data);

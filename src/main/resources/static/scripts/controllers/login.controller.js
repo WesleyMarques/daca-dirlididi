@@ -12,6 +12,10 @@
 
         lc.submitLogin = function() {
             Auth.login(lc.logindata, lc);
-        }
+        };
+
+        lc.loginWithFacebook = function () {
+            window.location.href = "/login/facebook";
+        };
     }
 })()

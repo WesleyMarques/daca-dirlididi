@@ -44,7 +44,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableAutoConfiguration
 @EnableSwagger2
-@EnableOAuth2Sso
 @ComponentScan
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
@@ -60,15 +59,15 @@ public class Application extends SpringBootServletInitializer {
 				.build();
 	}
 
-	@Bean
-	public FilterRegistrationBean jwtFilter() {
-
-		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-		registrationBean.setFilter(new JwtFilter());
-		registrationBean.addUrlPatterns("/api/*");
-
-		return registrationBean;
-	}
+//	@Bean
+//	public FilterRegistrationBean jwtFilter() {
+//
+//		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//		registrationBean.setFilter(new JwtFilter());
+//		registrationBean.addUrlPatterns("/api/*");
+//
+//		return registrationBean;
+//	}
 
 	@RequestMapping("/token")
 	@ResponseBody

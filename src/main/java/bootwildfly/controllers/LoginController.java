@@ -1,5 +1,6 @@
 package bootwildfly.controllers;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -65,4 +66,13 @@ public class LoginController {
 		session.removeAttribute("username");
 		return ("{message : 'Logout successful'}");
 	}
+
+	@RequestMapping(method = RequestMethod.GET, path = "/facebook/callback", produces = "application/json")
+	@ApiOperation(value = "Success callback of login with facebook", notes = "Realizes the login in the system")
+	public String loginFacebook(Principal principal, HttpSession session) {
+		authService.authenticate(principal, session);
+		return ("{message : 'Logout successful'}");
+	}
+
+
 }
