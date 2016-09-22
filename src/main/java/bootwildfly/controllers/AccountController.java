@@ -1,5 +1,7 @@
 package bootwildfly.controllers;
 
+import java.security.Principal;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +21,7 @@ import bootwildfly.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+
 @Api(value="account", description="Operations about account")
 @RestController
 public class AccountController {
@@ -34,9 +37,9 @@ public class AccountController {
 
 	@RequestMapping(method = RequestMethod.GET, path="/api/account", produces = "application/json")
 	@ApiOperation(value = "Returns the account info of session user", notes = "Returns the account info of session user")
-    public User get(HttpSession session) throws ServletException {
+    public Object get(Principal principal, HttpSession session) throws ServletException {
 		if (!authService.isAuth(session)) {
-			throw new ServletException("Nobody is logged!");
+			return null;
 		}
 		return authService.getUserAuthenticated(session);
     }

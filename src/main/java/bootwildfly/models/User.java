@@ -17,6 +17,8 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
+
+	private String socialId;
     
     @Column(nullable = false)
     private String email;
@@ -35,6 +37,14 @@ public class User {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Solution> solutions = new ArrayList<>();
+
+	public String getSocialId() {
+		return socialId;
+	}
+
+	public void setSocialId(String socialId) {
+		this.socialId = socialId;
+	}
 
 	public Long getId() {
 		return id;
