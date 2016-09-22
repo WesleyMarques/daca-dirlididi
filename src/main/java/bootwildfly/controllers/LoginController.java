@@ -70,7 +70,24 @@ public class LoginController {
 	@RequestMapping(method = RequestMethod.GET, path = "/facebook/callback", produces = "application/json")
 	@ApiOperation(value = "Success callback of login with facebook", notes = "Realizes the login in the system")
 	public String loginFacebook(Principal principal, HttpSession session) {
-		//authService.authenticate(principal, session);
+		try {
+			authService.authenticate(principal, session);
+		} catch(Exception e) {
+			return e.getMessage();
+		}
+
+		return ("{message : 'Logout successful'}");
+	}
+
+	@RequestMapping(method = RequestMethod.POST, path = "/facebook/callback", produces = "application/json")
+	@ApiOperation(value = "Success callback of login with facebook", notes = "Realizes the login in the system")
+	public String loginPostFacebook(Principal principal, HttpSession session) {
+		try {
+			authService.authenticate(principal, session);
+		} catch(Exception e) {
+			return e.getMessage();
+		}
+
 		return ("{message : 'Logout successful'}");
 	}
 
