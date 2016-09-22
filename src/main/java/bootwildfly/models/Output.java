@@ -13,7 +13,7 @@ public class Output {
     @Column(nullable = false)
     private String value;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="test_id", nullable = false)
     private ProblemTest test;
 

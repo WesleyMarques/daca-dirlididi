@@ -1,11 +1,9 @@
 package bootwildfly.controllers;
 
-import bootwildfly.models.User;
-import bootwildfly.models.repositories.UserRepository;
-import bootwildfly.services.AuthService;
-import bootwildfly.services.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import java.security.Principal;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
+import bootwildfly.models.User;
+import bootwildfly.models.repositories.UserRepository;
+import bootwildfly.services.AuthService;
+import bootwildfly.services.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 
 @Api(value="account", description="Operations about account")
 @RestController
