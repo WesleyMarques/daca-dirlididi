@@ -153,7 +153,7 @@ public class ProblemControllerTest {
 	public void postSolutionTest() throws JSONException {
 
 		ProblemTest test = new ProblemTest();
-		test.setName("Test 1");
+		test.setName("Test01");
 		test.setInput("14");
 		test.setOutput("15");
 		Problem p = problemRepository.findAll().get(0);

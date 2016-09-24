@@ -87,6 +87,7 @@ public class ProblemController {
 	public List<ProblemTest> submitSolution(@PathVariable("id") Long id, @RequestBody Solution solution, HttpSession session){
 		Problem problem = repProblem.findOne(id);
 		List<ProblemTest> failedTests = solutionService.testSolution(solution, problem);
+		
 		User user = authService.getUserAuthenticated(session);
 		if (failedTests.size() == 0) {
 			solutionService.pushSolution(problem, solution, user);

@@ -37,6 +37,8 @@ public class SolutionService {
 		solution.setUser(user);
 		user.getResolvidos().add(problem);
 		user.getSolutions().add(solution);
+		System.err.println("ERRRRRRr"+user.getResolvidos().size());
 		userRepository.save(user);
+		System.err.println("ERRRRRRr"+user.getResolvidos().size());
 	}
 }
