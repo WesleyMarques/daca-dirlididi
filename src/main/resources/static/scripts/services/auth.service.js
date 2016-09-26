@@ -18,7 +18,6 @@ function authService($http, $location, Account) {
     function login(data, scope) {
         return $http.post('/login', data)
             .success(function(data) {
-                console.log(data);
                 if (data != "user already authenticated") {
                     window.localStorage.setItem('token', data.token);
                     Service.token = data;
@@ -34,7 +33,6 @@ function authService($http, $location, Account) {
     function logout() {
         $http.post('/logout')
             .success(function(data) {
-                console.log(data);
                 Service.token = "";
                 Account.account = null;
                 $location.path("/login");

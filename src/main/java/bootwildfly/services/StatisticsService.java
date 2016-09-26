@@ -19,9 +19,9 @@ public class StatisticsService {
 
     public StatisticsService() {}
 
-    public Statistics getStatistics() {
+    public Statistics getStatistics(User user) {
         Statistics s = new Statistics();
-        s.problems_you_solved = getTotalProblemsYouSolved();
+        s.problems_you_solved = getTotalProblemsYouSolved(user);
         s.total_problems = getTotalProblem();
         s.total_users = getTotalUsers();
         return s;
@@ -35,11 +35,7 @@ public class StatisticsService {
         return (int) repProblem.count();
     }
 
-    private int getTotalProblemsYouSolved() {
-        // TODO get the user of session
-        if (repUser.count() > 0) {
-            return repUser.findAll().get(0).getResolvidos().size();
-        }
-        return 0;
+    private int getTotalProblemsYouSolved(User user) {
+        return user.getResolvidos().size();
     }
 }

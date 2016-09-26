@@ -18,11 +18,13 @@ function accountService($http, $location) {
           .success(function(data) {
               console.log(data);
               if (data == "") {
-                console.log(data);
                 Service.account = null;
                 $location.path('/login');
               } else {
                 Service.account = data;
+                if ($location.path() == "/login") {
+                  $location.path('/');
+                }
               }
           })
           .error(function(data) {

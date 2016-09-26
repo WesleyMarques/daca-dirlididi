@@ -1,5 +1,6 @@
 package bootwildfly.services;
 
+import bootwildfly.models.Role;
 import bootwildfly.models.User;
 import bootwildfly.models.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,18 @@ public class AuthService {
         return userRepository.findOneByEmail( (String) session.getAttribute("username"));
     }
 
-    public void authenticate(Principal principal, HttpSession session) {
+    public User findOrCreateFacebookUser(Principal principal) {
         User user = userRepository.findOneBySocialId(principal.getName());
         if (userRepository.findOneBySocialId(principal.getName()) != null) {
-            session.setAttribute("username", user.getEmail());
+            return user;
         } else {
             user = new User();
             user.setEmail(principal.getName());
             user.setPassword("a3kd09f809s8fa0d9fa8f0d8sa9fda09s8dfn");
+            user.setRole(Role.USER);
             user.setSocialId(principal.getName());
             userRepository.save(user);
+            return user;
         }
-        System.out.println(principal.getName());
-        System.out.println(principal.toString());
     }
 }

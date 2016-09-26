@@ -32,10 +32,11 @@
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="/">Welcome <span class="sr-only">(current)</span></a></li>
-          <li><a href="/problems">Problems</a></li>
-          <li><a href="/problem/create">Create Problem</a></li>
-          <li><a href="/ide">Ide</a></li>
+          <li ng-show="!mc.isAuth()"><a href="/login">Login</a></li>
+          <li ng-show="mc.isAuth()"><a href="/">Welcome <span class="sr-only">(current)</span></a></li>
+          <li ng-show="mc.isAuth()"><a href="/problems">Problems</a></li>
+          <li ng-show="mc.isAuth()"><a href="/problem/create">Create Problem</a></li>
+          <li ng-show="mc.isAuth()"><a href="/ide">Ide</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li ng-if="mc.isAuth()">

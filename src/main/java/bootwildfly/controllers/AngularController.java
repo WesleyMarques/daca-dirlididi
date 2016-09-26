@@ -1,13 +1,16 @@
 package bootwildfly.controllers;
 
+import bootwildfly.models.User;
 import bootwildfly.services.AuthService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 @Api(value = "pages", description = "Routes to all the pages of the system")
 @Controller
@@ -23,6 +26,14 @@ public class AngularController {
 		} else {
 			return "../static/index";
 		}
+	}
+
+	@RequestMapping(method = RequestMethod.GET, path = "/facebook/callback")
+	public String loginFacebook(Principal principal, HttpSession session) {
+		User user = authService.findOrCreateFacebookUser(principal);
+		session.setAttribute("username", user.getEmail());
+		System.out.println(session.getAttribute("username"));
+		return "redirect:/";
 	}
 
 	@RequestMapping(path = "/ide", method = RequestMethod.GET)
@@ -42,12 +53,6 @@ public class AngularController {
 
 	@RequestMapping(path = "/problem/{id}/edit", method = RequestMethod.GET)
 	public String editProblem() {
-		return "../static/index";
-	}
-
-	@RequestMapping(path = "/callback", method = RequestMethod.GET)
-	public String facebookCallback() {
-		System.out.println("ASDAISDIAISDA=============");
 		return "../static/index";
 	}
 

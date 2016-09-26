@@ -59,37 +59,4 @@ public class LoginController {
 			return jsonRes.toString();
 		}
 	}
-
-	@RequestMapping(method = RequestMethod.POST, path = "/logout", produces = "application/json")
-	@ApiOperation(value = "Logout of the system", notes = "Realizes the logout of the sytem")
-	public String logout(HttpSession session) {
-		session.removeAttribute("username");
-		return ("{message : 'Logout successful'}");
-	}
-
-	@RequestMapping(method = RequestMethod.GET, path = "/facebook/callback", produces = "application/json")
-	@ApiOperation(value = "Success callback of login with facebook", notes = "Realizes the login in the system")
-	public String loginFacebook(Principal principal, HttpSession session) {
-		try {
-			authService.authenticate(principal, session);
-		} catch(Exception e) {
-			return e.getMessage();
-		}
-
-		return ("{message : 'Logout successful'}");
-	}
-
-	@RequestMapping(method = RequestMethod.POST, path = "/facebook/callback", produces = "application/json")
-	@ApiOperation(value = "Success callback of login with facebook", notes = "Realizes the login in the system")
-	public String loginPostFacebook(Principal principal, HttpSession session) {
-		try {
-			authService.authenticate(principal, session);
-		} catch(Exception e) {
-			return e.getMessage();
-		}
-
-		return ("{message : 'Logout successful'}");
-	}
-
-
 }

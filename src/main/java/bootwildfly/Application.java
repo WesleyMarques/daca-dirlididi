@@ -55,19 +55,19 @@ public class Application extends SpringBootServletInitializer {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select().paths(PathSelectors.any())
 				.paths(Predicates.not(PathSelectors.regex("/error")))
+				.paths(Predicates.not(PathSelectors.regex("/login")))
 				.paths(Predicates.not(PathSelectors.regex("angular")))
 				.build();
 	}
 
-//	@Bean
-//	public FilterRegistrationBean jwtFilter() {
-//
-//		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-//		registrationBean.setFilter(new JwtFilter());
-//		registrationBean.addUrlPatterns("/api/*");
-//
-//		return registrationBean;
-//	}
+	@Bean
+	public FilterRegistrationBean jwtFilter() {
+		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+		registrationBean.setFilter(new JwtFilter());
+		//registrationBean.addUrlPatterns("/api/*");
+
+		return registrationBean;
+	}
 
 	@RequestMapping("/token")
 	@ResponseBody

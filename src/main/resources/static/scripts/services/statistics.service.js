@@ -15,7 +15,6 @@ function statisticsService($http) {
   function refresh() {
     $http.get('/api/statistics')
       .success(function(data) {
-        console.log(data);
         Service.data = data;
       })
       .error(function(data) {

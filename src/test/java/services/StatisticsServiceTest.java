@@ -37,9 +37,6 @@ public class StatisticsServiceTest {
     public void setup() {
         repUser.deleteAll();
         repProblem.deleteAll();
-        Assert.assertTrue(statisticsService.getStatistics().total_users == 0);
-        Assert.assertTrue(statisticsService.getStatistics().total_problems == 0);
-        Assert.assertTrue(statisticsService.getStatistics().problems_you_solved == 0);
     }
 
     @Test
@@ -49,17 +46,17 @@ public class StatisticsServiceTest {
         u.setPassword("123456");
         u.setRole(Role.USER);
         repUser.save(u);
-        Assert.assertTrue(statisticsService.getStatistics().total_users == 1);
+        Assert.assertTrue(statisticsService.getStatistics(u).total_users == 1);
 
         Problem p = new Problem();
         p.setName("Name 1");
         p.setDescription("Description 1");
         repProblem.save(p);
-        Assert.assertTrue(statisticsService.getStatistics().total_problems == 1);
+        Assert.assertTrue(statisticsService.getStatistics(u).total_problems == 1);
 
         u = repUser.findAll().get(0);
         u.getResolvidos().add(repProblem.findAll().get(0));
         repUser.save(u);
-        Assert.assertTrue(statisticsService.getStatistics().problems_you_solved == 1);
+        Assert.assertTrue(statisticsService.getStatistics(u).problems_you_solved == 1);
     }
 }

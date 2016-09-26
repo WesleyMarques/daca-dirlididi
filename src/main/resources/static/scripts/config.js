@@ -9,32 +9,50 @@ function configApp($routeProvider, $locationProvider, $httpProvider) {
         .when('/', {
             templateUrl: '/templates/welcome.html',
             controller: 'MainCtrl',
-            controllerAs: 'mc'
+            controllerAs: 'mc',
+            resolve: {
+                access: ["Auth", function (Auth) { return Auth.isAuthenticated(); }],
+            }
         })
         .when('/login', {
             templateUrl: '/templates/login.html',
             controller: 'LoginCtrl',
-            controllerAs: 'lc'
+            controllerAs: 'lc',
+            resolve: {
+                access: ["Auth", function (Auth) { return !Auth.isAuthenticated(); }],
+            }
         })
         .when('/problems', {
             templateUrl: '/templates/list_problem.html',
             controller: 'ProblemCtrl',
-            controllerAs: 'pc'
+            controllerAs: 'pc',
+            resolve: {
+                access: ["Auth", function (Auth) { return Auth.isAuthenticated(); }],
+            }
         })
         .when('/problem/create', {
             templateUrl: '/templates/create_problem.html',
             controller: 'ProblemCtrl',
-            controllerAs: 'pc'
+            controllerAs: 'pc',
+            resolve: {
+                access: ["Auth", function (Auth) { return Auth.isAuthenticated(); }],
+            }
         })
         .when('/problem/:id/edit', {
             templateUrl: '/templates/edit_problem.html',
             controller: 'ProblemCtrl',
-            controllerAs: 'pc'
+            controllerAs: 'pc',
+            resolve: {
+                access: ["Auth", function (Auth) { return Auth.isAuthenticated(); }],
+            }
         })
         .when('/ide', {
             templateUrl: '/templates/ide.html',
             controller: 'IdeCtrl',
-            controllerAs: 'ic'
+            controllerAs: 'ic',
+            resolve: {
+                access: ["Auth", function (Auth) { return Auth.isAuthenticated(); }],
+            }
         })
         .otherwise({
             redirectTo: '/login'
