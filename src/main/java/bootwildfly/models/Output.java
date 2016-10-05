@@ -13,8 +13,8 @@ public class Output {
     @Column(nullable = false)
     private String value;
 
-    @ManyToOne
-    @JoinColumn(name="test_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="test_id")
     private ProblemTest test;
 
     public Output() { }

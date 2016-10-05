@@ -10,7 +10,10 @@ import bootwildfly.models.Role;
 import bootwildfly.models.User;
 import bootwildfly.models.repositories.ProblemRepository;
 import bootwildfly.models.repositories.UserRepository;
+import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,8 +75,17 @@ public class StatisticsControllerTest {
 	}
 
 	@Test
-	public void testGetStatistics() {
-		given().header("Authorization", TOKEN)
+	public void testGetStatistics() throws JSONException {
+
+		JSONObject json = new JSONObject();
+		json.put("email", "daca");
+		json.put("password", "daca");
+
+		String sessionId = given().body(json.toString())
+				.contentType("application/json; charset=UTF-8")
+				.when().post("/login").then().extract().sessionId();
+
+		given().header("Authorization", TOKEN).sessionId(sessionId)
 				.when()
 				.get(STATISTICS).then()
 				.statusCode(HttpStatus.SC_OK)

@@ -33,6 +33,5 @@ public class StaticticsController {
 		} else {
 			return null;
 		}
-
     }
 }

@@ -1,13 +1,18 @@
 package controllers;
 
+import bootwildfly.Application;
 import bootwildfly.models.Problem;
 import bootwildfly.models.ProblemTest;
 import bootwildfly.models.Role;
 import bootwildfly.models.User;
 import bootwildfly.models.repositories.ProblemRepository;
+import bootwildfly.models.repositories.ProblemTestRepository;
 import bootwildfly.models.repositories.UserRepository;
-import org.json.*;
-import org.junit.After;
+import com.jayway.restassured.RestAssured;
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,27 +21,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.jayway.restassured.RestAssured;
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
-import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.HttpStatus;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import bootwildfly.Application;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ProblemControllerTest {
 
 	private final String TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYWNhIiwicm9sZXMiOltudWxsXSwiaWF0IjoxNDczMjA5NzE3LCJleHAiOjI5NDY0MTk0MzV9.4bA5G4pqTuk96S5-o2cvKKsVVN7-v2G0PLCqELlAxoY";
@@ -52,13 +50,14 @@ public class ProblemControllerTest {
 	ProblemRepository problemRepository;
 
 	@Autowired
+	ProblemTestRepository problemTestRepository;
+
+	@Autowired
 	UserRepository userRepository;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
-		problemRepository.deleteAll();
-		userRepository.deleteAll();
 
 		User u = new User();
 		u.setEmail("teste@gmail.com");
@@ -117,6 +116,8 @@ public class ProblemControllerTest {
 	public void deleteProblemTest(){
 		Long id_problem = problemRepository.findAll().get(0).getId();
 
+		Assert.assertTrue(problemRepository.count() == 2);
+
 		given().header("Authorization", TOKEN)
 		.pathParam("id", id_problem)
 		.delete(PROBLEM_ID)
@@ -130,7 +131,7 @@ public class ProblemControllerTest {
 		.then()
 		.statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 
-		Assert.assertTrue(problemRepository.count() == 0);
+		Assert.assertTrue(problemRepository.count() == 1);
 	}
 	
 	@Test
@@ -164,7 +165,9 @@ public class ProblemControllerTest {
 		JSONObject output = new JSONObject();
 
 		JSONObject teste = new JSONObject();
+		teste.put("name", "Test01");
 		teste.put("input", "14");
+		teste.put("id", problemTestRepository.findAll().get(0).getId());
 		teste.put("output", "15");
 
 		output.put("value", "15");

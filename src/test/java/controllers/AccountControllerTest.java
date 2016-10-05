@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -29,6 +30,7 @@ import bootwildfly.models.repositories.UserRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@ActiveProfiles(value = "test")
 @IntegrationTest("server.port:0")
 public class AccountControllerTest {
 	private static final String ACCOUNT = "/api/account";
@@ -51,7 +53,7 @@ public class AccountControllerTest {
 		JSONObject json = new JSONObject();
 		json.put("email", "wesley@gmail.com");
 		json.put("password", "123456");
-		json.put("role", "ADMIN");		
+		json.put("role", "ADMIN");
 		given().header("Authorization", TOKEN).
 		contentType(org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE).
 		body(json.toString()).

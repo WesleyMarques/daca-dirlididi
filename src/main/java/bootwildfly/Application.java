@@ -42,7 +42,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {
+		org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
 @EnableSwagger2
 @ComponentScan
 @SpringBootApplication
@@ -60,20 +61,20 @@ public class Application extends SpringBootServletInitializer {
 				.build();
 	}
 
-	@Bean
-	public FilterRegistrationBean jwtFilter() {
-		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-		registrationBean.setFilter(new JwtFilter());
-		//registrationBean.addUrlPatterns("/api/*");
+//	@Bean
+//	public FilterRegistrationBean jwtFilter() {
+//		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//		registrationBean.setFilter(new JwtFilter());
+//		//registrationBean.addUrlPatterns("/api/*");
+//
+//		return registrationBean;
+//	}
 
-		return registrationBean;
-	}
-
-	@RequestMapping("/token")
-	@ResponseBody
-	public Map<String, String> token(HttpSession session) {
-		return Collections.singletonMap("token", session.getId());
-	}
+//	@RequestMapping("/token")
+//	@ResponseBody
+//	public Map<String, String> token(HttpSession session) {
+//		return Collections.singletonMap("token", session.getId());
+//	}
 	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
