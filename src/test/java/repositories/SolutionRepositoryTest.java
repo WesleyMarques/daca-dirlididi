@@ -69,7 +69,6 @@ public class SolutionRepositoryTest {
         s.setProblem(repProblem.findAll().get(0));
         Output o = new Output();
         o.setValue("Output 1");
-        o.setTest(repTest.findAll().get(0));
         s.getOutputs().add(o);
 
         repSol.save(s);
@@ -83,7 +82,6 @@ public class SolutionRepositoryTest {
         Assert.assertTrue(repTest.count() == 1);
         Assert.assertTrue(repSol.findAll().get(0).getOutputs().size() == 1);
         Assert.assertTrue(repSol.findAll().get(0).getProblem() != null);
-        Assert.assertTrue(repSol.findAll().get(0).getOutputs().get(0).getTest() != null);
     }
 
     @Test

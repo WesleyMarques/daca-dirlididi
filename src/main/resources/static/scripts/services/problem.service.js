@@ -72,7 +72,7 @@ function problemService($http, $location) {
         Service.refresh();
       })
       .error(function(data) {
-        console.log('Error: ' + data);
+        console.log(data);
       });
   }
 
@@ -88,7 +88,7 @@ function problemService($http, $location) {
         }
       })
       .error(function(data) {
-        console.log('Error: ' + data);
+        console.log(data);
       });
   }
 }

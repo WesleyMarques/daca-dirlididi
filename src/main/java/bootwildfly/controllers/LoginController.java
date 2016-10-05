@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bootwildfly.services.AuthService;
@@ -36,8 +38,6 @@ public class LoginController {
 	@Autowired
 	UserRepository userRepository;
 
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "email", value = "User's email", required = true, dataType = "string", paramType = "body") })
 	@RequestMapping(method = RequestMethod.POST, path = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = "application/json")
 	@ApiOperation(value = "Login in the system", notes = "Realizes the login in the sytem")
 	public String login(@RequestBody final User user, HttpSession session) throws ServletException, JSONException {

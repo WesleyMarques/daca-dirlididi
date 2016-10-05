@@ -23,6 +23,7 @@ import org.springframework.cglib.core.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -47,6 +48,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @ComponentScan
 @SpringBootApplication
+@ActiveProfiles(value = "development")
 public class Application extends SpringBootServletInitializer {
 	
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
