@@ -37,13 +37,17 @@ public class AccountController {
 
 	@RequestMapping(method = RequestMethod.GET, path="/api/account", produces = "application/json")
 	@ApiOperation(value = "Returns the account info of session user", notes = "Returns the account info of session user")
-    public Object get(HttpSession session) throws ServletException, JSONException {
+    public Object get(Principal principal, HttpSession session) throws ServletException, JSONException {
 		if (!authService.isAuth(session)) {
 			JSONObject jsonRes = new JSONObject();
 			jsonRes.put("message", "Nobody is authenticated");
 			return jsonRes;
 		}
-		return authService.getUserAuthenticated(session);
+		User user = authService.getUserAuthenticated(session);
+		if (principal != null) {
+			user.setPrincipal(principal);
+		}
+		return user;
     }
 
 	@RequestMapping(method = RequestMethod.POST, path="/api/account", produces = "application/json")

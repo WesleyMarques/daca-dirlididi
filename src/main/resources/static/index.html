@@ -12,8 +12,23 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
   <script src="/scripts/angular-route.min.js"></script>
-  <script src="/scripts/jquery.dataTables.min.js"></script>
   <script src="/scripts/angular-datatables.min.js"></script>-->
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDUYqoevBOdhQB4YY8nTyptv6tpo2bYxm4",
+      authDomain: "daca-chat.firebaseapp.com",
+      databaseURL: "https://daca-chat.firebaseio.com",
+      storageBucket: "",
+      messagingSenderId: "964358028493"
+    };
+    firebase.initializeApp(config);
+  </script>
+
   <script src="/scripts/config.js"></script>
 
   <script src="/scripts/controllers/login.controller.js"></script>

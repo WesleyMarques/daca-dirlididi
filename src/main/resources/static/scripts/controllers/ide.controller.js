@@ -2,9 +2,9 @@
     angular.module('MyApp')
         .controller('IdeCtrl', IdeCtrl);
 
-    IdeCtrl.$inject = ['Problem', 'Account'];
+    IdeCtrl.$inject = ['Problem', 'Account', '$firebaseArray'];
 
-    function IdeCtrl(Problem, Account) {
+    function IdeCtrl(Problem, Account, $firebaseArray) {
         var ic = this;
 
         Problem.refresh();
@@ -14,8 +14,26 @@
         ic.solutiondata = {};
         ic.outputs = [];
         ic.tests_failed = [];
+        ic.messages = [];
+        ic.accountService = Account;
+
+
+        ic.setChat = function () {
+            var problem = Problem.data[ic.problemToSolve]
+            var ref = new Firebase("https://daca-chat.firebaseio.com/" + problem.id);
+            ic.messages = $firebaseArray(ref)
+        };
+        
+        ic.sendMessage = function () {
+            ic.messages.$add({
+                text: ic.message,
+                user : Account.account.email,
+                date : new Date().getTime()
+            });
+        };
 
         ic.setOutputs = function (problem_index) {
+            ic.setChat();
             var problem = Problem.data[problem_index];
             var outputs = [];
             if (problem) {

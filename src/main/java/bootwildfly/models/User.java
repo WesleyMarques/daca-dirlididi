@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,19 @@ public class User {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Solution> solutions = new ArrayList<>();
 
+	@Transient
+	private Principal principal;
+
 	public String getSocialId() {
 		return socialId;
+	}
+
+	public Principal getPrincipal() {
+		return principal;
+	}
+
+	public void setPrincipal(Principal principal) {
+		this.principal = principal;
 	}
 
 	public void setSocialId(String socialId) {

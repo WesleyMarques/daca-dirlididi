@@ -1,44 +1,75 @@
 <div class="container">
-
-
-  <form role="form" ng-submit="ic.submit()">
-    <div class="col-sm-6 col-sm-offset-3 form-group">
-      <ul>
-        <div class="alert alert-danger" ng-repeat="fail in ic.tests_failed">
-          Failed on test {{$index + 1}} to input {{fail.input}}
-        </div>
+  <div class="col-sm-5">
+    <div class="page-header">
+      <h3>Real Time Solution Discussion</h3>
+    </div>
+    <div ng-if="ic.problemToSolve">
+      <ul id="chats" class="list-group" style="max-height:500px;overflow-y: auto;">
+        <li class="list-group-item" ng-repeat="msg in ic.messages" style="display: inline-block;">
+          <strong ng-class="msg.user == ic.accountService.account.email ? 'text-success' : 'text-danger'">
+            {{msg.user == ic.accountService.account.email ? 'you' : msg.user }}
+          </strong>
+          <small>said:</small> {{msg.text}}
+          <div class="pull-right text-info" style="font-size: 11px;margin-top: 12px;">
+            <span>in {{msg.date | date : 'medium'}}</span>
+          </div>
+        </li>
       </ul>
+      <div>
+        <input class="form-control pull-left" type="text" ng-model="ic.message" style="width:80%;"/>
+        <button class="btn btn-primary pull-right" ng-click="ic.sendMessage()" style="width:20%;  ">
+          send
+        </button>
+      </div>
     </div>
-    <div class="col-sm-6 col-sm-offset-3 form-group">
-      <label>Problem*</label>
-      <select class="form-control" ng-model="ic.problemToSolve"
-        ng-change="ic.setOutputs(ic.problemToSolve)">
-        <option ng-repeat="option in ic.problemService.data" ng-value="{{$index}}" ng-show="ic.isNotSolved(option.id)">
-          {{option.name}}
-        </option>
-      </select>
+    <div ng-if="!ic.problemToSolve">
+      No problem selected
     </div>
 
-    <div ng-show="ic.problemToSolve">
-      <div class="col-sm-6 col-sm-offset-3 form-group">
-        <label>Solution Description*</label>
-        <input class="form-control" ng-model="ic.solutiondata.body" placeholder="Description" required>
-      </div>
-      <div class="col-sm-6 col-sm-offset-3 form-group" ng-repeat="output in ic.outputs">
-        <div>
-          <label>Input</label>
-          <input class="form-control" ng-model="output.test.input" disabled="">
+  </div>
+
+  <div class="col-sm-7">
+    <div class="page-header">
+      <h3>Submit Your Solution</h3>
+      <form role="form" ng-submit="ic.submit()">
+        <div class="col-sm-12 form-group">
+          <ul>
+            <div class="alert alert-danger" ng-repeat="fail in ic.tests_failed">
+              Failed on test {{$index + 1}} to input {{fail.input}}
+            </div>
+          </ul>
         </div>
-        <div>
-          <label>Output</label>
-          <input class="form-control" ng-model="output.value">
+        <div class="col-sm-12 form-group">
+          <label>Problem*</label>
+          <select class="form-control" ng-model="ic.problemToSolve"
+                  ng-change="ic.setOutputs(ic.problemToSolve)">
+            <option ng-repeat="option in ic.problemService.data" ng-value="{{$index}}" ng-show="ic.isNotSolved(option.id)">
+              {{option.name}}
+            </option>
+          </select>
         </div>
-      </div>
 
-      <div class="col-sm-6 col-sm-offset-3 form-group">
-        <button type="submit" class="btn btn-success">Submit Solution</button>
-      </div>
+        <div ng-show="ic.problemToSolve">
+          <div class="col-sm-12 form-group">
+            <label>Solution Description*</label>
+            <input class="form-control" ng-model="ic.solutiondata.body" placeholder="Description" required>
+          </div>
+          <div class="col-sm-12 form-group" ng-repeat="output in ic.outputs">
+            <div>
+              <label>Input</label>
+              <input class="form-control" ng-model="output.test.input" disabled="">
+            </div>
+            <div>
+              <label>Output</label>
+              <input class="form-control" ng-model="output.value">
+            </div>
+          </div>
+
+          <div class="col-sm-12 form-group">
+            <button type="submit" class="btn btn-success">Submit Solution</button>
+          </div>
+        </div>
+      </form>
     </div>
-
-  </form>
+  </div>
 </div>

@@ -21,6 +21,9 @@ function accountService($http, $location) {
                 Service.account = null;
                 $location.path('/login');
               } else {
+                if (data.principal != null) {
+                  data.email = data.principal.userAuthentication.details.name;
+                }
                 Service.account = data;
                 if ($location.path() == "/login") {
                   $location.path('/');
